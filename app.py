@@ -234,7 +234,9 @@ taux_conversion = {
     "GNF": { "RUB": 108.29, "XOF": 15.282, "XAF": 15.364, "GHS": 844.66, "MRU": 219.70, "CDF": 2.9568 }
 }
 
-
+@app.route("/")
+def splash():
+    return render_template("index.html")  # Ton écran de démarrage
 
 @app.route('/api/taux', methods=['POST'])
 def update_taux():
