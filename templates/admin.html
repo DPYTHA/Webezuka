@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>E$UKA CONTROL</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .header-buttons button {
+      margin-left: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .header-buttons .taux { background-color: #3498db; color: white; }
+    .header-buttons .logout { background-color: #e74c3c; color: white; }
+    .container {
+      padding: 20px 40px;
+    }
+    .colis{
+      background-color: #28a745;
+      color: #ccc;
+    }
+     .header-buttons a{
+      text-decoration: none;
+     }
+    .header-buttons a:hover{
+        background-color: #3498db;
+    }
+     .header-buttons .logout:hover{
+      background-color:black;
+     }
+    .header-buttons a{
+     margin-left: 10px;
+      padding: 8px 15px;
+      border: none; 
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    h2 {
+      background-color: #34495e;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #ecf0f1;
+    }
+    .btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-valide { background-color: #2ecc71; color: white; }
+    .btn-annule { background-color: #f39c12; color: white; }
+    .btn-supprime { background-color: #e74c3c; color: white; }
+    .btn-attente {
+  background-color: #d3d3d3;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-valide {
+  background-color: #28a745;
+  color: white;
+}
+.btn-attente {
+  background-color: orange;
+  color: white;
+}
+
+.btn-valide {
+  background-color: green;
+  color: white;
+}
+
+.btn-annule {
+  background-color: red;
+  color: white;
+}
+
+.btn-supprime {
+  background-color: grey;
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>E$UKA CONTROL</h1>
+    <div class="header-buttons">
+      <a class="colis"  href="gestion_colis.html"> Gestion Colis</a>
+      <a href="tauxfisher.html"><button class="taux">Taux-Fisher</button></a>
+      <button  class="logout"   onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="search-box">
+  <input type="text" id="searchInput" placeholder="Recherche (nom, prénom, email)...">
+</div>
+
+
+    <h2>Utilisateurs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Email</th>
+          <th>Pays</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+      </tbody>
+    </table>
+
+    <h2>Dépôts</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Montant</th>
+          <th>Pays</th>
+          <th>Mode</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+      </tbody>
+    </table>
+
+    <h2>Transferts</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Expéditeur</th>
+          <th>Montant</th>
+          <th>Pays destinataire</th>
+          <th>Mode</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+      </tbody>
+    </table>
+
+    <h2>Retraits</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Téléphone</th>
+          <th>Email</th>
+          <th>Montant</th>
+          <th>Frais</th>
+          <th>Reçu</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+      </tbody>
+    </table>
+
+    <h2>Colis</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Expéditeur</th>
+          <th>Destinataire</th>
+          <th>Montant</th>
+          <th>Pays</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+      </tbody>
+    </table>
+  </div>
+
+<script>
+function sendAction(action, type, id, button) {
+  fetch(`http://127.0.0.1:5000/${action}/${type}/${id}`, {
+    method: 'POST'
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      if (action === 'valider') {
+        button.classList.remove('btn-attente');
+        button.classList.add('btn-valide');
+        button.innerText = 'Validé';
+        button.disabled = true; // désactive le bouton pour éviter double clic
+      } else if (action === 'annuler') {
+        button.classList.remove('btn-attente');
+        button.classList.add('btn-annule');
+        button.innerText = 'Annulé';
+        button.disabled = true;
+      } else if (action === 'supprimer') {
+        const row = button.closest('tr');
+        row.remove();
+      }
+    } else {
+      alert('Erreur : ' + data.message);
+    }
+  })
+  .catch(error => {
+    alert('Une erreur est survenue');
+    console.error(error);
+  });
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = 'home.html';
+}
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // API : utilisateurs
+  fetch("http://127.0.0.1:5000/api/users")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelectorAll("table")[0].querySelector("tbody");
+      tbody.innerHTML = "";
+      data.forEach(user => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.nom}</td>
+          <td>${user.prenom}</td>
+          <td>${user.email}</td>
+          <td>${user.pays}</td>
+          <td>
+            <button class="btn-attente" onclick="sendAction('valider', 'user', ${user.id}, this)">En attente</button>
+            <button class="btn btn-annule" onclick="sendAction('annuler', 'user', ${user.id}, this)">Annuler</button>
+            <button class="btn btn-supprime" onclick="sendAction('supprimer', 'user', ${user.id}, this)">Supprimer</button>
+          </td>`;
+        tbody.appendChild(row);
+      });
+    });
+
+  // API : dépôts
+  fetch("http://127.0.0.1:5000/api/depots")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelectorAll("table")[1].querySelector("tbody");
+      tbody.innerHTML = "";
+      data.forEach(depot => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${depot.nom}</td>
+          <td>${depot.prenom}</td>
+          <td>${depot.montant}</td>
+          <td>${depot.pays}</td>
+          <td>${depot.mode}</td>
+          <td>${depot.date}</td>
+          <td>
+            <button class="btn-attente" onclick="sendAction('valider', 'depot', ${depot.id}, this)">En attente</button>
+            <button class="btn btn-annule" onclick="sendAction('annuler', 'depot', ${depot.id}, this)">Annuler</button>
+            <button class="btn btn-supprime" onclick="sendAction('supprimer', 'depot', ${depot.id}, this)">Supprimer</button>
+          </td>`;
+        tbody.appendChild(row);
+      });
+    });
+
+  // API : transferts
+fetch("http://127.0.0.1:5000//api/transfertsBoard")
+   .then(res => res.json())
+  .then(data => {
+    const tbody = document.querySelectorAll("table")[2].querySelector("tbody");
+    tbody.innerHTML = "";
+    data.forEach(transfert => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${transfert.nom_expediteur}</td>
+        <td>${transfert.devise_envoyeur}</td>
+        <td>${transfert.montant_envoye}</td>
+        <td>${transfert.pays_destinataire}</td>
+        <td>${transfert.devise_destinataire}</td>
+        <td>${transfert.montant_recu}</td>
+        <td>${transfert.mode_paiement}</td>
+        <td>${transfert.telephone_beneficiaire}</td>
+        <td>${transfert.date}</td>
+        <td>
+          <button class="btn-attente" onclick="sendAction('valider', 'transfert', ${transfert.id}, this)">En attente</button>
+          <button class="btn btn-annule" onclick="sendAction('annuler', 'transfert', ${transfert.id}, this)">Annuler</button>
+          <button class="btn btn-supprime" onclick="sendAction('supprimer', 'transfert', ${transfert.id}, this)">Supprimer</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  });
+
+
+  // API : retraits
+  fetch("http://127.0.0.1:5000/api/retraits")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelectorAll("table")[3].querySelector("tbody");
+      tbody.innerHTML = "";
+      data.forEach(retrait => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${retrait.nom}</td>
+          <td>${retrait.telephone}</td>
+          <td>${retrait.email}</td>
+          <td>${retrait.montant}</td>
+          <td>${retrait.frais}</td>
+          <td>${retrait.recu}</td>
+          <td>${retrait.date}</td>
+          <td>
+            <button class="btn-attente" onclick="sendAction('valider', 'retrait', ${retrait.id}, this)">En attente</button>
+            <button class="btn btn-annule" onclick="sendAction('annuler', 'retrait', ${retrait.id}, this)">Annuler</button>
+            <button class="btn btn-supprime" onclick="sendAction('supprimer', 'retrait', ${retrait.id}, this)">Supprimer</button>
+          </td>`;
+        tbody.appendChild(row);
+      });
+    });
+
+  // API : colis
+  fetch("http://127.0.0.1:5000/api/colis")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelectorAll("table")[4].querySelector("tbody");
+      tbody.innerHTML = "";
+      data.forEach(colis => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${colis.expediteur}</td>
+          <td>${colis.destinataire}</td>
+          <td>${colis.montant}</td>
+          <td>${colis.pays}</td>
+          <td>${colis.date}</td>
+          <td>
+            <button class="btn-attente" onclick="sendAction('valider', 'colis', ${colis.id}, this)">En attente</button>
+            <button class="btn btn-annule" onclick="sendAction('annuler', 'colis', ${colis.id}, this)">Annuler</button>
+            <button class="btn btn-supprime" onclick="sendAction('supprimer', 'colis', ${colis.id}, this)">Supprimer</button>
+          </td>`;
+        tbody.appendChild(row);
+      });
+    });
+
+    
+});
+
+</script>
+
+
+<script>
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const tables = document.querySelectorAll("table");
+
+    tables.forEach(table => {
+      const rows = table.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+        row.style.display = rowText.includes(query) ? "" : "none";
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

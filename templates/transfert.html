@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Transfert - ÉZUKA</title>
+ <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0b1a2b;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 40px 0;
+    }
+    .container {
+      background: #112f4c;
+      padding: 30px;
+      border-radius: 10px;
+      width: 390px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: normal;
+    }
+    .solde{
+      text-align: center;
+      background-color: #0b1a2b;
+      height: 50px;
+      width: 280px;
+      padding-top: 20px;
+      border-radius: 10px;
+      margin-left: 50px;
+      font-size: 17px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    #devises{
+      display: none;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      color: #0b1a2b;
+    }
+    input[readonly] {
+      background-color: #ccc;
+      color: #444;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background-color: #004b87;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #007acc;
+    }
+
+    /* MODALE */
+    .modal {
+      display: none; /* cachée par défaut */
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #004b87;
+      padding: 30px;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 480px;
+      color: white;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.9);
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: normal;
+    }
+    .modal-content p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+    #btnValider {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #007acc;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #btnValider:hover {
+      background-color: #0099ff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Effectuer un Transfert</h2>
+    <div class="solde">
+    Solde disponible : <strong id="solde">Chargement...</strong>
+  </div>
+    <form id="transfertForm">
+      <label style="display: none;" for="devise">Devise (expéditeur)</label>
+      <input  style="display: none;" id="devise" name="devise" readonly />
+
+      <label for="mode_paiement">Mode de paiement</label>
+      <select id="mode_paiement" required>
+        <option value="">Sélectionnez un mode de paiement</option>
+        <option value="Orange Money">Orange Money</option>
+        <option value="Moov">Moov</option>
+        <option value="MTNmoney">MTNmoney</option>
+        <option value="Wave">Wave</option>
+        <option value="Djamo">Djamo</option>
+        <option value="Nita">Nita</option>
+        <option value="Sberbank">Sberbank</option>
+        <option value="Tinkoff">Tinkoff</option>
+        <option value="Vtb">VTBank</option>
+      </select>
+
+      <label for="pays_destinataire">Pays du destinataire</label>
+      <select id="pays_destinataire" required>
+        <option value="">Sélectionnez un pays</option>
+        <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+        <option value="Mali">Mali</option>
+        <option value="Burkina-Faso">Burkina-Faso</option>
+        <option value="Sénégal">Sénégal</option>
+        <option value="Cameroun">Cameroun</option>
+        <option value="Ghana">Ghana</option>
+        <option value="Mauritanie">Mauritanie</option>
+        <option value="Niger">Niger</option>
+        <option value="Congo-Kinshasa">Congo-Kinshasa</option>
+        <option value="Bénin">Bénin</option>
+        <option value="Togo">Togo</option>
+        <option value="Guinée-Conakry">Guinée-Conakry</option>
+        <option value="Russie">Russie</option>
+      </select>
+
+      <label style="display: none;" for="devise_destinataire">Devise du destinataire</label>
+      <input style="display: none;" type="text" id="devise_destinataire" readonly placeholder="devise du pays" />
+
+      <label for="montant">Montant à transférer</label>
+      <input type="number" id="montant" min="1" step="any" required />
+
+      <label for="montant_recu">Montant à recevoir</label>
+      <input type="text" id="montant_recu" readonly />
+
+      <label for="destinataire">Téléphone du bénéficiaire</label>
+      <input type="tel" id="destinataire" placeholder="+225xxxxxxxxxx" pattern="^\+[\d]{1,4}[\d\s\-]{6,14}$" required
+        oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Numéro invalide. Format attendu: +225xxxxxxxxxx')" />
+
+      <button type="submit">Confirmer le transfert</button>
+    </form>
+  </div>
+
+  <!-- MODALE -->
+  <div id="modalRecap" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h3>Récapitulatif du transfert</h3>
+      <p><strong>Expéditeur :</strong></p>
+      <p>Nom : <span id="recap_nom_expediteur"></span></p>
+      <p>Email : <span id="recap_email_expediteur"></span></p>
+      <hr>
+      <p><strong>Devise (expéditeur) :</strong> <span id="recap_devise"></span></p>
+      <p><strong>Mode de paiement :</strong> <span id="recap_mode"></span></p>
+      <p><strong>Pays destinataire :</strong> <span id="recap_pays"></span></p>
+      <p><strong>Devise destinataire :</strong> <span id="recap_devise_dest"></span></p>
+      <p><strong>Montant envoyé :</strong> <span id="recap_montant"></span></p>
+      <p><strong>Montant à recevoir :</strong> <span id="recap_montant_recu"></span></p>
+      <p><strong>Téléphone bénéficiaire :</strong> <span id="recap_benef"></span></p>
+      <button id="btnValider">Valider le transfert</button>
+    </div>
+  </div>
+
+  <script>
+
+     let tauxConversion = {};
+   
+
+fetch('http://127.0.0.1:5000/api/taux')
+  .then(res => res.json())
+  .then(data => {
+    console.log("Taux récupérés avec succès :", data);
+    tauxConversion = data;
+    // Pas de populateTable ici
+  })
+
+
+
+
+  // Association pays → devise
+  const paysToDevise = {
+    "côte d'ivoire": "XOF",
+    "mali": "XOF",
+    "burkina-faso": "XOF",
+    "sénégal": "XOF",
+    "cameroun": "XAF",
+    "ghana": "GHS",
+    "mauritanie": "MRU",
+    "niger": "XOF",
+    "congo-kinshasa": "CDF",
+    "bénin": "XOF",
+    "togo": "XOF",
+    "guinée-conakry": "GNF",
+    "russie": "RUB"
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte"));
+  if (!utilisateur) {
+    alert("Utilisateur non connecté !");
+    return;
+  }
+
+  const pays = (utilisateur.pays || "").toLowerCase();
+  const devise = paysToDevise[pays] || "XOF";
+  let tauxConversion = {};
+
+  // Charger les taux de conversion d'abord
+  fetch('http://127.0.0.1:5000/api/taux')
+    .then(res => res.json())
+    .then(data => {
+      console.log("Taux récupérés avec succès :", data);
+      tauxConversion = data;
+      initialiserTransfert(utilisateur, devise, tauxConversion);
+    })
+    .catch(err => {
+      console.error("Erreur chargement taux :", err);
+      alert("Impossible de charger les taux de conversion !");
+    });
+});
+
+function initialiserTransfert(utilisateur, devise, tauxConversion) {
+  let solde = 0;
+
+  const deviseExpediteurInput = document.getElementById("devise");
+  const recapNom = document.getElementById("recap_nom_expediteur");
+  const recapEmail = document.getElementById("recap_email_expediteur");
+  const recapDevise = document.getElementById("recap_devise");
+
+  deviseExpediteurInput.value = devise;
+  recapNom.textContent = utilisateur.nom || "";
+  recapEmail.textContent = utilisateur.email || "";
+  recapDevise.textContent = devise;
+
+  const userEmail = utilisateur.email;
+  fetch(`http://127.0.0.1:5000/get-solde?email=${userEmail}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.solde !== undefined) {
+        solde = parseFloat(data.solde);
+        document.getElementById('solde').innerText = solde.toLocaleString('fr-FR') + " " + devise;
+      } else {
+        throw new Error("Solde introuvable");
+      }
+    })
+    .catch(err => {
+      console.error("Erreur récupération solde :", err);
+      document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+    });
+
+  const paysDest = document.getElementById("pays_destinataire");
+  const deviseDestInput = document.getElementById("devise_destinataire");
+  const montantInput = document.getElementById("montant");
+  const montantRecuInput = document.getElementById("montant_recu");
+
+  function calculerMontantRecu() {
+    const montant = parseFloat(montantInput.value);
+    const deviseExp = deviseExpediteurInput.value;
+    const deviseDest = deviseDestInput.value;
+
+    if (isNaN(montant) || !deviseExp || !deviseDest) {
+      montantRecuInput.value = "";
+      return;
+    }
+
+    const frais = montant * 0.03;
+    const montantNet = montant - frais;
+
+    const taux = (tauxConversion[deviseExp] && tauxConversion[deviseExp][deviseDest]) || 0;
+    if (taux === 0) {
+      montantRecuInput.value = "Taux indisponible";
+      return;
+    }
+
+    const montantRecu = montantNet * taux;
+    montantRecuInput.value = montantRecu.toFixed(2);
+  }
+
+  paysDest.addEventListener("change", () => {
+    const pays = paysDest.value.toLowerCase();
+    const devise = paysToDevise[pays] || "";
+    deviseDestInput.value = devise;
+    calculerMontantRecu();
+  });
+
+  montantInput.addEventListener("input", calculerMontantRecu);
+
+  const form = document.getElementById("transfertForm");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    document.getElementById("recap_mode").textContent = document.getElementById("mode_paiement").value;
+    document.getElementById("recap_pays").textContent = paysDest.value;
+    document.getElementById("recap_devise_dest").textContent = deviseDestInput.value;
+    document.getElementById("recap_montant").textContent = montantInput.value + " " + deviseExpediteurInput.value;
+    document.getElementById("recap_montant_recu").textContent = montantRecuInput.value + " " + deviseDestInput.value;
+    document.getElementById("recap_benef").textContent = document.getElementById("destinataire").value;
+
+    document.getElementById("modalRecap").style.display = "flex";
+  });
+
+  document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("modalRecap").style.display = "none";
+  });
+
+  document.getElementById("btnValider").addEventListener("click", () => {
+    const data = {
+      expediteur_nom: document.getElementById("recap_nom_expediteur").textContent,
+      expediteur_email: document.getElementById("recap_email_expediteur").textContent,
+      devise_expediteur: deviseExpediteurInput.value,
+      montant: parseFloat(montantInput.value),
+      pays_destinataire: paysDest.value,
+      devise_destinataire: deviseDestInput.value,
+      montant_recu: parseFloat(montantRecuInput.value),
+      destinataire: document.getElementById("destinataire").value,
+      mode_paiement: document.getElementById("mode_paiement").value
+    };
+
+    fetch("http://127.0.0.1:5000/api/transfert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Erreur lors de l'enregistrement");
+        return response.json();
+      })
+      .then(result => {
+        alert(result.message || "Transfert enregistré !");
+        document.getElementById("modalRecap").style.display = "none";
+        form.reset();
+        montantRecuInput.value = "";
+        deviseDestInput.value = "";
+      })
+      .catch(error => {
+        console.error("Erreur :", error);
+        alert("Erreur lors du transfert.");
+      });
+  });
+}
+ 
+</script>
+
+
+</body>
+</html>

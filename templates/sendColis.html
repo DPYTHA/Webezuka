@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Enregistrement Colis | EZUKA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+     background-image: url('images/colis.png');
+     background-size: cover;
+    }
+    .first_container{
+      display: flex;
+      align-items: center;
+      
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #3498db;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .success {
+      color: green;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+     .tracking {
+      margin-right: 30px;
+     }
+    .tracking button{
+      background-color: #194878;
+      width: 220px;
+      height: 60px;
+      
+      
+    }
+     .tracking a{
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+     }
+  </style>
+</head>
+<body>
+<div class="first_container">
+<div class="container">
+  <h2>Envoyer un colis avec EZUKA</h2>
+  <form id="colisForm" enctype="multipart/form-data">
+    <input type="text" name="expediteur_nom" placeholder="Nom de l'expéditeur" required>
+    <input type="tel" name="expediteur_telephone" placeholder="Téléphone de l'expéditeur" required>
+    <input type="text" name="adresse_depart" placeholder="Adresse d’envoi (ville ou pays)" required>
+
+    <input type="text" name="destinataire_nom" placeholder="Nom du destinataire" required>
+    <input type="tel" name="destinataire_telephone" placeholder="Téléphone du destinataire" required>
+    <input type="text" name="pays_destination" placeholder="Pays de destination" required>
+    <input type="text" name="adresse_destination" placeholder="Adresse de livraison" required>
+
+    <select name="type_colis" required>
+      <option value="">Type de colis</option>
+      <option value="Documents">Documents</option>
+      <option value="Vêtements">Vêtements</option>
+      <option value="Nourriture">Nourriture</option>
+      <option value="Autre">Autre</option>
+    </select>
+
+    <input type="number" name="poids_kg" placeholder="Poids estimé (kg)" required>
+    <input type="text" name="valeur_estimee" placeholder="Valeur estimée (optionnel)">
+    <textarea name="description" placeholder="Description du contenu" rows="3" required></textarea>
+
+   
+    <button type="submit">Envoyer le colis</button>
+  </form>
+
+  <p id="responseMessage" class=""></p>
+  
+</div>
+<div class="tracking">
+  <p><i>Lorsque vous clickez sur "Envoyer le colis" ,un code tracker apparaitra .<br> suivez
+    votre colis ici 
+  </i></p>
+  <button><a href="tracking.html">Tracker Colis</a></button>
+  
+  
+  </div>
+
+</div>
+<script>
+document.getElementById("colisForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+
+  const data = {
+  expediteur_nom: form.expediteur_nom.value,
+  destinataire_nom: form.destinataire_nom.value,
+  pays_destination: form.pays_destination.value,
+  adresse_destination: form.adresse_destination.value,
+  telephone_destinataire: form.destinataire_telephone.value,
+  poids_kg: parseFloat(form.poids_kg.value),
+  valeur_estimee: parseFloat(form.valeur_estimee.value) || 0
+};
+
+
+  fetch("http://127.0.0.1:5000/colis/enregistrer", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+})
+.then(res => {
+  if (!res.ok) {
+    throw new Error("Erreur serveur : " + res.status);
+  }
+  return res.json();
+})
+.then(data => {
+  const msg = document.getElementById("responseMessage");
+  if (data.success) {
+    msg.className = "success";
+    msg.textContent = "Colis enregistré avec succès. Code de suivi : " + data.code_colis;
+    form.reset();
+  } else {
+    msg.className = "error";
+    msg.textContent = "Erreur : " + (data.message || "Impossible d'enregistrer le colis.");
+  }
+})
+.catch(err => {
+  const msg = document.getElementById("responseMessage");
+  msg.className = "error";
+  msg.textContent = "Erreur serveur : " + err.message;
+  console.error(err);
+});
+
+});
+</script>
+
+
+</body>
+</html>

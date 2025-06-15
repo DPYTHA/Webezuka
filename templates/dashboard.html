@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - ÉZUKA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #061a26;
+      color: white;
+    }
+
+    .header {
+      background-color: #083442;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #fff;
+    }
+
+    .user-info {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .main {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .solde {
+      background: #fff;
+      color: #083442;
+      padding: 20px 40px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .section h2 {
+      text-align: left;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      flex: 1 1 45%;
+      background-color: #0b4d66;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #009acd;
+    }
+
+    .logout-btn {
+      background-color: #cf2a27;
+      margin-top: 20px;
+    }
+
+    .whatsapp-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideLeft 1s ease-out;
+}
+
+.whatsapp-float {
+  background-color: #25D366;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease-in-out;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-float img {
+  width: 50px;
+  height: 50px;
+}
+
+.whatsapp-bulle {
+  background: #25D366;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  white-space: nowrap;
+  animation: pulse 2s infinite;
+}
+
+/* Animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideLeft {
+  0% { opacity: 0; transform: translateX(100px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Bienvenue sur ÉZUKA</h1>
+    <div class="user-info" id="userInfo"></div>
+  </div>
+
+  <div class="main">
+    <div class="solde" id="solde">Solde {devise}</div>
+
+    <div class="section">
+      <h2>Transactions</h2>
+      <div class="buttons">
+        <button class="btn" onclick="location.href='deposit.html'">Dépôt</button>
+        <button class="btn" onclick="location.href='transfert.html'">Transfert</button>
+        <button class="btn" onclick="location.href='retrait.html'">Retrait</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Business</h2>
+      <div class="buttons">
+        <button class="btn" onclick="location.href='bussiness.html'">Investissement</button>
+        <button class="btn" onclick="location.href='sendColis.html'">Envoi Colis</button>
+        <button class="btn" onclick="location.href='receiptcolis.html'">Réception Colis</button>
+      </div>
+    </div>
+
+    <button class="btn logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+
+  <script>
+   const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte") );
+
+const prenom = utilisateur.prenom || '';
+const nom = utilisateur.nom || '';
+const pays = utilisateur.pays || ''; // valeur par défaut
+ const devise = utilisateur.devise || ''; // ← récupérée automatiquement pendant le login
+document.getElementById('userInfo').innerText = `${prenom} ${nom} `;
+
+// Simuler affichage du solde (à remplacer par un fetch dynamique si besoin)
+const userEmail = utilisateur.email || '';
+
+fetch(`http://localhost:5000/get-solde?email=${userEmail}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.solde !== undefined) {
+      document.getElementById('solde').innerText = `Solde : ${data.solde} ${devise}`;
+    }
+  })
+  .catch(err => {
+    console.error("Erreur récupération solde :", err);
+    document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+  });
+
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'home.html';
+    }
+  </script>
+<div class="whatsapp-container">
+  <a href="https://wa.me/message/XTQKCCN4ZCN7L1" target="_blank" class="whatsapp-float">
+    <img src="https://img.icons8.com/ios-filled/60/ffffff/whatsapp--v1.png" alt="Contact WhatsApp" />
+  </a>
+  <div class="whatsapp-bulle">Besoin d’aide ?</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inscription - ÉZUKA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    img.logo {
+      border-radius: 50%;
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #083442;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #009acd;
+    }
+    p#error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="/images/LogoScan.png" alt="ÉZUKA" class="logo" />
+    <h2>Créer un compte</h2>
+    <form id="registerForm">
+      <input type="text" name="nom" placeholder="Nom" required>
+      <input type="text" name="prenom" placeholder="Prénom" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="motdepasse" placeholder="Mot de passe (min. 6 caractères)" minlength="6" required>
+      <input type="text" name="telephone" placeholder="Téléphone" required>
+
+      <select name="pays" id="pays" required>
+        <option value="">Sélectionnez votre pays</option>
+        <option>Côte d'Ivoire</option>
+        <option>Mali</option>
+        <option>Burkina-Faso</option>
+        <option>Sénégal</option>
+        <option>Cameroun</option>
+        <option>Ghana</option>
+        <option>Mauritanie</option>
+        <option>Niger</option>
+        <option>Congo-Kinshasa</option>
+        <option>Bénin</option>
+        <option>Togo</option>
+        <option>Guinée-Conakry</option>
+        <option>Russie</option>
+      </select>
+
+      <input type="text" name="devise" id="devise" placeholder="Devise" readonly required>
+
+      <button type="submit">S'inscrire</button>
+      <br><br>
+      <i>Déjà inscrit ? <a href="login.html">Connectez-vous</a></i>
+    </form>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    // Map pays vers devise
+    const paysToDevise = {
+      "Côte d'Ivoire": "XOF",
+      "Mali": "XOF",
+      "Burkina-Faso": "XOF",
+      "Sénégal": "XOF",
+      "Cameroun": "XAF",
+      "Ghana": "GHS",
+      "Mauritanie": "XOF",
+      "Niger": "XOF",
+      "Congo-Kinshasa": "CDF",
+      "Bénin": "XOF",
+      "Togo": "XOF",
+      "Guinée-Conakry": "GNF",
+      "Russie": "RUB"
+    };
+
+    document.getElementById('pays').addEventListener('change', function () {
+      const selectedPays = this.value;
+      document.getElementById('devise').value = paysToDevise[selectedPays] || '';
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+
+      const data = {
+        nom: form.nom.value.trim(),
+        prenom: form.prenom.value.trim(),
+        email: form.email.value.trim(),
+        motdepasse: form.motdepasse.value,
+        telephone: form.telephone.value.trim(),
+        pays: form.pays.value,
+        devise: form.devise.value
+      };
+
+      try {
+        const res = await fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        document.getElementById('error').innerText = result.message;
+
+        if (res.ok) {
+          alert("✅ Inscription réussie !");
+          window.location.href = "login.html";
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('error').innerText = "❌ Erreur de connexion au serveur.";
+      }
+    });
+  </script>
+
+</body>
+</html>

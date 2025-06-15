@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E$UKA - Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="images/png" href="{{ url_for('images', filename='MonLogo.png') }}">
+  <link rel="icon" type="image/png" href="images/MonLogo.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #001F3F, #87CEFA);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .logo-circle {
+      background-color: #004080;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .app-name {
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-top: 10px;
+    }
+
+    .slogan {
+      font-size: 16px;
+      margin: 10px 0 30px;
+      font-style: italic;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      background-color: white;
+      color: #004080;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #2e2e4d;
+      color: #ffffff;
+    }
+
+    .ad-section {
+      margin-top: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .ad-section h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    
+    .whatsapp-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideLeft 1s ease-out;
+}
+
+.whatsapp-float {
+  background-color: #25D366;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease-in-out;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-float img {
+  width: 50px;
+  height: 50px;
+}
+
+.whatsapp-bulle {
+  background: #25D366;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  white-space: nowrap;
+  animation: pulse 2s infinite;
+}
+
+/* Animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideLeft {
+  0% { opacity: 0; transform: translateX(100px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-circle">
+      <img src="/images/LogoScan.png" alt="ÉZUKA" class="logo" />
+    </div>
+    <div class="app-name">E$UKA</div>
+    <div class="slogan">L'Argent va et vient</div>
+
+    <button class="btn" onclick="window.location.href='register.html'">S'enregistrer</button>
+    <button class="btn" onclick="window.location.href='login.html'">Se connecter</button>
+
+    <div class="ad-section">
+      <h3>Pourquoi choisir E$UKA ?</h3>
+      <p>💸 Transferts rapides et sécurisés vers toute l’Afrique.</p>
+      <p>📱 Suivi en temps réel de vos transactions.</p>
+      <p>🌍 Disponible partout dans le monde, 24h/24, 7j/7.</p>
+      <p>🎁 Bonus de bienvenue pour les nouveaux utilisateurs.</p>
+    </div>
+  </div>
+
+
+  <div class="whatsapp-container">
+  <a href="https://wa.me/message/XTQKCCN4ZCN7L1" target="_blank" class="whatsapp-float">
+    <img src="https://img.icons8.com/ios-filled/60/ffffff/whatsapp--v1.png" alt="Contact WhatsApp" />
+  </a>
+  <div class="whatsapp-bulle">Besoin d’aide ?</div>
+</div>
+</body>
+</html>

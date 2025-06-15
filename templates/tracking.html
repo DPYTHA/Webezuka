@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Suivi de Colis - Ezuka</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .error {
+      color: red;
+      margin-top: 20px;
+    }
+
+    .firstContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .processLivraison {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      background: #e6f0ff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .processLivraison > div {
+      flex: 1 1 140px;
+      margin: 5px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      background-color: white;
+      border: 2px solid #007bff;
+      transition: transform 0.3s ease;
+    }
+
+    .processLivraison > div:hover {
+      transform: scale(1.05);
+    }
+
+    .processLivraison h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #007bff;
+    }
+
+    .processLivraison span {
+      display: block;
+      margin-top: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    @media (min-width: 768px) {
+      .firstContainer {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      button {
+        margin-left: 10px;
+        margin-top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="firstContainer">
+    <div class="container">
+      <h1>Suivi de votre colis</h1>
+      <p>Entrez le <strong>code colis</strong> fourni après l'enregistrement :</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <input type="text" id="codeColis" placeholder="Ex: ABC123456">
+        <button onclick="trackColis()">Suivre</button>
+      </div>
+    </div>
+
+    <div class="processLivraison">
+      <div class="etap1"><h3>Étape 1</h3> <span>En attente</span></div>
+      <div class="etap2"><h3>Étape 2</h3> <span>Reçu</span></div>
+      <div class="etap3"><h3>Étape 3</h3> <span>Embarquement</span></div>
+      <div class="etap4"><h3>Étape 4</h3> <span>Livré</span></div>
+    </div>
+  </div>
+
+  <div id="result" class="result" style="display:none;"></div>
+  <div id="error" class="error"></div>
+
+  <script>
+    function trackColis() {
+      const code = document.getElementById("codeColis").value.trim();
+      const resultDiv = document.getElementById("result");
+      const errorDiv = document.getElementById("error");
+
+      resultDiv.style.display = "none";
+      errorDiv.innerText = "";
+
+      if (!code) {
+        errorDiv.innerText = "Veuillez entrer un code colis.";
+        return;
+      }
+
+      fetch(`http://127.0.0.1:5000/colis/track?code_colis=${code}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) {
+            errorDiv.innerText = data.message || "Colis non trouvé.";
+            return;
+          }
+
+          resultDiv.innerHTML = `
+            <h3>📦 Code : ${data.code_colis}</h3>
+            <p><strong>Expéditeur :</strong> ${data.expediteur_nom}</p>
+            <p><strong>Destinataire :</strong> ${data.destinataire_nom}</p>
+            <p><strong>Pays de destination :</strong> ${data.pays_destination}</p>
+            <p><strong>Adresse :</strong> ${data.adresse_destination}</p>
+            <p><strong>Téléphone :</strong> ${data.telephone_destinataire}</p>
+            <p><strong>Poids :</strong> ${data.poids_kg} kg</p>
+            <p><strong>Valeur estimée :</strong> ${data.valeur_estimee || 'N/A'} XOF</p>
+            <p><strong>📍 Statut :</strong> <span style="color: green">${data.statut}</span></p>
+            <p><strong>Date création :</strong> ${new Date(data.date_creation).toLocaleString()}</p>
+            <p><strong>Dernière mise à jour :</strong> ${new Date(data.date_maj).toLocaleString()}</p>
+          `;
+          resultDiv.style.display = "block";
+        })
+        .catch(err => {
+          errorDiv.innerText = "Erreur lors du suivi du colis.";
+          console.error(err);
+        });
+    }
+  </script>
+</body>
+</html>

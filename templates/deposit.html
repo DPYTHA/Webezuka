@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dépôt Manuel</title>
+    <style>
+        body {
+           background-color: #0b1a2b;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 300px;
+            margin: 90px auto;
+            background-color: #122b52;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e90ff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0077e6;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        .modal-content {
+            background-color: #122b52;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            color: white;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chrono {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff5e5e;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dépôt </h2>
+        <form id="depotForm">
+            <label style="display: none;">Nom :</label>
+            <input  style="display: none;" type="text" name="nom" id="nom" readonly  required>
+
+            <label style="display: none;">Prénom :</label>
+            <input  style="display: none;" type="text" name="prenom" id="prenom"   readonly required>
+            <label  style="display: none;">Devise :</label>
+            <input style="display: none;"  type="text" name="devise" id="devise" readonly>
+
+            <label>Montant  :</label>
+            <input type="number" name="montant" id="montant" step="0.01" required>
+
+            <label> Votre Pays :</label>
+            <select id="pays" required>
+                <option disabled selected value="">Choisissez</option>
+                <option>Côte d'Ivoire</option>
+                <option>Burkina-Faso</option>
+                <option>Sénégal</option>
+                <option>Guinée-Conakry</option>
+                <option>Mali</option>
+                <option>Cameroun</option>
+                <option>Niger</option>
+                <option>Bénin</option>
+                <option>Togo</option>
+                <option>Russie</option>
+                <option>Ghana</option>
+                <option>Mauritanie</option>
+                <option>Congo-Kinshasa</option>
+            </select>
+             <label for="destinataire">Téléphone du bénéficiaire</label>
+      <input type="number" id="telephone" placeholder="+225xxxxxxxxxx" pattern="^\+[\d]{1,4}[\d\s\-]{6,14}$" required
+        oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Numéro invalide. Format attendu: +225xxxxxxxxxx')" />
+            <label>Mode de paiement :</label>
+            <select name="mode" required>
+                <option disabled selected value="">Choisissez</option>
+                <option>Orange Money</option>
+                <option>Moov</option>
+                <option>MTNMoney</option>
+                <option>Wave</option>
+                <option>Djamo</option>
+                <option>Nita</option>
+                <option>Sberbank</option>
+                <option>Tinkoff</option>
+                <option>VTBank</option>
+            </select>
+
+            <button type="submit">valider</button>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div id="modalRecap" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Récapitulatif de votre dépôt</h3>
+            <p id="recapText"></p>
+            <div class="chrono">Temps restant : <span id="timer">10:00</span></div>
+        </div>
+    </div>
+
+    <script>
+
+      document.addEventListener("DOMContentLoaded", () => {
+            // Récupération depuis le localStorage
+            const nom = localStorage.getItem("nom") || "";
+            const prenom = localStorage.getItem("prenom") || "";
+               const devise = localStorage.getItem("devise") || "";
+
+            // Remplissage automatique
+            document.getElementById("nom").value = nom;
+            document.getElementById("prenom").value = prenom;
+            document.getElementById("devise").value = devise;
+          })
+
+
+
+        const form = document.getElementById("depotForm");
+        const modal = document.getElementById("modalRecap");
+        const recapText = document.getElementById("recapText");
+        const timerElement = document.getElementById("timer");
+
+        let countdown;
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+    const nom = document.getElementById("nom").value;
+    const prenom = document.getElementById("prenom").value;
+    const montant = document.getElementById("montant").value;
+    const devise = document.getElementById("devise").value || "";
+    const pays = document.getElementById("pays").value;
+    const mode = form.querySelector('select[name="mode"]').value;
+    const telephone = document.getElementById("telephone").value;
+
+
+
+     const data = {
+        nom,
+        prenom,
+        montant,
+        devise,
+        pays,
+        mode,
+        telephone  // ✅ Ajout du téléphone dans les données envoyées
+    };
+    
+
+     fetch("http://localhost:5000/api/depot", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+        console.log(response.message || response.error);
+    })
+    .catch(err => console.error(err));
+
+            let message = `Vous êtes sur le point de faire un dépôt de <strong>${montant} ${devise}</strong> sur votre compte.<br><br>`;
+
+            const orangeGroup = ["Côte d'Ivoire", "Burkina-Faso", "Sénégal", "Guinée", "Mali", "Cameroun", "Niger"];
+            const moovGroup = ["Bénin", "Togo"];
+            const SberGroup=["Russie"];
+            const GhanaGroup=["Ghana"];
+
+            if (orangeGroup.includes(pays)) {
+                message += `Veuillez transférer la somme à : <strong>+225 0757123619</strong> via OrangeMoney ou Wave (ANOUZAN OLIVIA).`;
+            } else if (moovGroup.includes(pays)) {
+                message += `Veuillez transférer la somme à : <strong>+225 0170675351</strong> via MoovMoney (ANOUZAN OLIVIA).`;
+
+             } else if (SberGroup.includes(pays)) {
+                message += `Veuillez transférer la somme à : <strong>+7 9879040719</strong> via Sberbank (Агуа Муа) .`;
+
+            } else if (GhanaGroup.includes(pays)) {
+                message += `Veuillez transférer la somme à : <strong>+225 0575913252</strong> via MTNmoney (AKA BERNARD) .`;
+            } else {
+                message += `Méthode de transfert indisponible pour ce pays.`;
+            }
+
+            recapText.innerHTML = message;
+            modal.style.display = "block";
+            startCountdown(10 * 60);
+        });
+
+        function closeModal() {
+            modal.style.display = "none";
+            clearInterval(countdown);
+            timerElement.textContent = "10:00";
+        }
+
+        function startCountdown(duration) {
+            let time = duration;
+            countdown = setInterval(() => {
+                let minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (--time < 0) {
+                    clearInterval(countdown);
+                    timerElement.textContent = "Temps écoulé !";
+                }
+            }, 1000);
+        }
+
+        // Close modal on click outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>
