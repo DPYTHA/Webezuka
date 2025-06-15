@@ -2,7 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key")
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "postgresql://ezuka_user:Pytha1991@localhost/ezuka_db")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "postgresql://ezuka_user:Pytha1991@localhost/ezuka")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587

@@ -30,7 +30,7 @@ CORS(app, supports_credentials=True)
 colis_bp = Blueprint('colis', __name__)
 
 # Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ezuka_user:Pytha1991@localhost/ezuka'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'ton_secret_key')
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
