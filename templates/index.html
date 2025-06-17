@@ -1,35 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <!-- Balises Open Graph pour l’aperçu du site -->
-<meta property="og:title" content="ÉZUKA - Votre plateforme de transfert d'argent et colis" />
-<meta property="og:description" content="Envoyez de l'argent et vos colis facilement avec ÉZUKA." />
-<meta property="og:image" content="https://ibb.co/TqN7hnRR" />
-<meta property="og:url" content="https://ezuka.com" />
-
-<meta property="og:type" content="website" />
-
-<!-- Pour Twitter (optionnel mais recommandé) -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="ÉZUKA - Votre plateforme de finance et colis" />
-<meta name="twitter:description" content="Rejoignez ÉZUKA pour vos dépôts, transferts et colis." />
-<meta name="twitter:image" content="https://ibb.co/TqN7hnRR" />
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E$UKA - Splash Screen</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-  <link rel="web icon" href="MonLogo.png">
- <link rel="icon" type="image/png" href="{{ url_for('static', filename='LogoScan.png') }}">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/LogoScan.png') }}">
+
+  <!-- Splash Design -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(to bottom right, #001F3F, #87CEFA);
@@ -37,6 +19,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0;
     }
 
     .splash-container {
@@ -53,8 +36,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 20px auto;
-      animation: pop 1s ease;
+      margin: 0 auto 20px;
     }
 
     .logo {
@@ -79,24 +61,19 @@
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
-
-    @keyframes pop {
-      from { transform: scale(0); }
-      to { transform: scale(1); }
-    }
   </style>
 
+  <!-- Redirection automatique vers home.html -->
   <script>
-    // Rediriger vers home.html après 5 secondes
     setTimeout(function() {
-      window.location.href = "home.html";
+      window.location.href = "{{ url_for('home') }}";
     }, 5000);
   </script>
 </head>
 <body>
   <div class="splash-container">
     <div class="logo-circle">
-   <img src="{{ url_for('static', filename='images/LogoScan.png') }}" alt="Logo">
+      <img src="{{ url_for('static', filename='images/LogoScan.png') }}" alt="Logo" class="logo">
     </div>
     <div class="app-name">E$UKA</div>
     <div class="slogan">"L'argent, ça va et ça vient"</div>
