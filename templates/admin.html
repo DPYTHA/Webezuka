@@ -153,7 +153,9 @@
           <th>Nom</th>
           <th>Prénom</th>
           <th>Email</th>
-          <th>Pays</th>
+           <th>Téléphone</th> <!-- ajout -->
+           <th>Pays</th>
+           <th>Solde</th> 
           <th>Actions</th>
         </tr>
       </thead>
@@ -168,6 +170,7 @@
         <tr>
           <th>Nom</th>
           <th>Prénom</th>
+          <th>Téléphone</th> <!-- ajout -->
           <th>Montant</th>
           <th>Pays</th>
           <th>Mode</th>
@@ -287,7 +290,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${user.nom}</td>
           <td>${user.prenom}</td>
           <td>${user.email}</td>
-          <td>${user.pays}</td>
+           <td>${user.telephone}</td> <!-- ajout -->
+           <td>${user.pays}</td>
+           <td>${user.solde}</td>     <!-- ajout -->
           <td>
             <button class="btn-attente" onclick="sendAction('valider', 'user', ${user.id}, this)">En attente</button>
             <button class="btn btn-annule" onclick="sendAction('annuler', 'user', ${user.id}, this)">Annuler</button>
@@ -308,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         row.innerHTML = `
           <td>${depot.nom}</td>
           <td>${depot.prenom}</td>
+           <td>${depot.telephone}</td> <!-- ajout -->
           <td>${depot.montant}</td>
           <td>${depot.pays}</td>
           <td>${depot.mode}</td>

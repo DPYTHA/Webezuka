@@ -479,8 +479,10 @@ L’équipe ÉZUKA
 def transfert():
     data = request.get_json()
 
-    # Récupérer l'utilisateur
     email = data.get('expediteur_email')
+    if not email:
+        return jsonify({"success": False, "message": "Email expéditeur manquant."}), 400
+
     utilisateur = User.query.filter_by(email=email).first()
     if not utilisateur:
         return jsonify({"success": False, "message": "Utilisateur non trouvé."}), 404
@@ -489,7 +491,7 @@ def transfert():
         montant_envoye = float(data.get('montant', 0))
         if montant_envoye <= 0:
             return jsonify({"success": False, "message": "Montant invalide."}), 400
-    except ValueError:
+    except (ValueError, TypeError):
         return jsonify({"success": False, "message": "Montant incorrect."}), 400
 
     if utilisateur.solde < montant_envoye:
@@ -497,20 +499,30 @@ def transfert():
 
     devise_source = data.get('devise_expediteur') or utilisateur.devise
     pays_dest = data.get('pays_destinataire')
-    devise_dest = pays_to_devise.get(pays_dest.lower(), "XOF")
+    if not pays_dest:
+        return jsonify({"success": False, "message": "Pays destinataire manquant."}), 400
 
-    taux = taux_conversion.get(devise_source, {}).get(devise_dest)
-    if not taux:
-        return jsonify({"success": False, "message": "Taux de conversion introuvable."}), 400
+    devise_dest = data.get('devise_destinataire') or pays_to_devise.get(pays_dest.lower(), "XOF")
 
-    frais = 0.03
-    montant_recu = montant_envoye * taux * (1 - frais)
+    if devise_source == devise_dest:
+        taux = 1.0
+    else:
+        try:
+            taux = taux_conversion[devise_source][devise_dest]
+        except KeyError:
+            return jsonify({"success": False, "message": f"Taux introuvable pour {devise_source} -> {devise_dest}."}), 400
+
+    try:
+        montant_recu = float(data.get('montant_recu'))
+    except (ValueError, TypeError):
+        frais = 0.03
+        montant_recu = montant_envoye * taux * (1 - frais)
 
     utilisateur.solde -= montant_envoye
 
     transfert = Transfert(
         expediteur_id=utilisateur.id,
-        expediteur_nom=utilisateur.prenom + " " + utilisateur.nom,
+        expediteur_nom=data.get('expediteur_nom', utilisateur.prenom + " " + utilisateur.nom),
         expediteur_email=utilisateur.email,
         devise_envoyeur=devise_source,
         montant_envoye=montant_envoye,
@@ -525,7 +537,6 @@ def transfert():
     db.session.commit()
 
     try:
-        # Mail à l'utilisateur
         msg = Message(
             subject="Confirmation de votre transfert - ÉZUKA",
             sender=app.config['MAIL_USERNAME'],
@@ -549,7 +560,6 @@ L'équipe ÉZUKA
 """
         mail.send(msg)
 
-        # Mail à l'admin
         admin_msg = Message(
             subject="📢 NOUVEAU TRANSFERT ÉZUKA",
             sender=app.config['MAIL_USERNAME'],
@@ -580,6 +590,7 @@ Date : {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
         "message": f"✅ Transfert réussi ! {montant_envoye:.2f} {devise_source} . Le bénéficiaire recevra {montant_recu:.2f} {devise_dest} dans moins de 5 minutes. Merci pour la confiance!",
         "nouveau_solde": round(utilisateur.solde, 2)
     })
+
 
 
 
@@ -995,12 +1006,12 @@ def get_colis():
 @app.route("/api/users", methods=["GET"])
 def get_users():
     users = User.query.order_by(User.date_inscription.desc()).all()
-    return jsonify([{ "id": u.id, "nom": u.nom, "prenom": u.prenom, "email": u.email, "pays": u.pays } for u in users])
+    return jsonify([{ "id": u.id, "nom": u.nom, "prenom": u.prenom, "email": u.email,  'telephone': u.telephone,"pays": u.pays,'solde': u.solde } for u in users])
 
 @app.route("/api/depots", methods=["GET"])
 def get_depots():
     depots = Depot.query.order_by(Depot.date_envoi.desc()).all()
-    return jsonify([{ "id": d.id, "nom": d.nom, "prenom": d.prenom, "montant": d.montant, "pays": d.pays, "mode": d.mode, "date": d.date_envoi.strftime('%Y-%m-%d') } for d in depots])
+    return jsonify([{ "id": d.id, "nom": d.nom, "prenom": d.prenom, 'telephone': d.telephone, "montant": d.montant, "pays": d.pays, "mode": d.mode, "date": d.date_envoi.strftime('%Y-%m-%d') } for d in depots])
 
 @app.route("/api/transferts", methods=["GET"])
 def get_transferts():

@@ -367,7 +367,7 @@ function initialiserTransfert(utilisateur, devise, tauxConversion) {
       mode_paiement: document.getElementById("mode_paiement").value
     };
 
-    fetch("http://127.0.0.1:5000/api/transfert", {
+    fetch("http://192.168.1.5:5000/api/transfert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -385,6 +385,7 @@ function initialiserTransfert(utilisateur, devise, tauxConversion) {
       })
       .catch(error => {
         console.error("Erreur :", error);
+         error.text && error.text().then(t => console.log("Détails :", t));
         alert("Erreur lors du transfert.");
       });
   });
