@@ -30,17 +30,16 @@ CORS(app, supports_credentials=True)
 colis_bp = Blueprint('colis', __name__)
 
 # Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'ton_secret_key')
-app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
+# Charge les variables depuis .env ou Railway
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Automatic avec Railway
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-# Configuration mail
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = os.getenv("EMAIL_SENDER", "moua19878@gmail.com")
-app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD", "yebymjdfpwjqsevt")
+# Configuration Gmail (SSL)
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 465))
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'True').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
 EMAIL_SENDER = app.config['MAIL_USERNAME']
 EMAIL_ADMIN = "moua19878@gmail.com"
