@@ -238,6 +238,11 @@ taux_conversion = {
 def splash():
     return render_template("index.html")  # Ton écran de démarrage
 
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
+
 @app.route('/api/taux', methods=['POST'])
 def update_taux():
     data = request.get_json()

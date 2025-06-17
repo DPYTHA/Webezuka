@@ -20,7 +20,8 @@
   <title>E$UKA - Splash Screen</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
   <link rel="web icon" href="MonLogo.png">
-  <link rel="icon" type="image/png" href="/static/LogoScan.png" />
+ <link rel="icon" type="image/png" href="{{ url_for('static', filename='LogoScan.png') }}">
+
 
   <style>
     * {
@@ -95,7 +96,7 @@
 <body>
   <div class="splash-container">
     <div class="logo-circle">
-    <img src="/static/images/LogoScan.png" alt="ÉZUKA" class="logo" />
+   <img src="{{ url_for('static', filename='images/LogoScan.png') }}" alt="Logo">
     </div>
     <div class="app-name">E$UKA</div>
     <div class="slogan">"L'argent, ça va et ça vient"</div>
