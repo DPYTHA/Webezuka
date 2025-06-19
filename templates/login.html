@@ -70,68 +70,69 @@
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-      const data = Object.fromEntries(new FormData(this));
-      const messageEl = document.getElementById('message');
-      messageEl.textContent = '';
+    const data = Object.fromEntries(new FormData(this));
+    const messageEl = document.getElementById('message');
+    messageEl.textContent = '';
 
-      try {
-        const res = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+    try {
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
 
-        const result = await res.json();
+      // ✅ Sécurité : vérifie que la réponse est bien du JSON
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Réponse invalide du serveur (pas JSON)");
+      }
 
-        if (res.ok && result.token) {
-          // Stocker les infos dans localStorage
-         
-          localStorage.setItem("token", result.token);
-          localStorage.setItem('prenom', result.prenom || '');
-          localStorage.setItem('nom', result.nom || '');
-          localStorage.setItem('email', result.email || '');
-          localStorage.setItem('role', result.role || '');
-          localStorage.setItem('devise',result.devise || '')
-          localStorage.setItem('pays', result.pays || '');
+      const result = await res.json();
 
-          
+      // ✅ Si la réponse est correcte
+      if (res.ok && result.token) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("prenom", result.prenom || '');
+        localStorage.setItem("nom", result.nom || '');
+        localStorage.setItem("email", result.email || '');
+        localStorage.setItem("role", result.role || '');
+        localStorage.setItem("devise", result.devise || '');
+        localStorage.setItem("pays", result.pays || '');
 
-          localStorage.setItem("utilisateurConnecte", JSON.stringify({
-  nom: result.nom || '',
-  prenom: result.prenom || '',
-  email: result.email || '',
-  role: result.role || '',
-  devise: result.devise || '',
-  pays: result.pays || ''
-}));
+        localStorage.setItem("utilisateurConnecte", JSON.stringify({
+          nom: result.nom || '',
+          prenom: result.prenom || '',
+          email: result.email || '',
+          role: result.role || '',
+          devise: result.devise || '',
+          pays: result.pays || ''
+        }));
 
+        alert("Connexion réussie !");
 
-          alert('Connexion réussie !');
-         
-
-
-          // Redirection selon le rôle
-          if (result.role === 'admin') {
-            window.location.href = 'admin.html';
-          } else {
-            window.location.href = 'dashboard.html';
-          }
-
+        // Redirection selon rôle
+        if (result.role === 'admin') {
+          window.location.href = '/admin';
         } else {
-          messageEl.textContent = result.message || "Échec de la connexion. Vérifiez vos identifiants.";
+          window.location.href = '/dashboard';
         }
 
-      } catch (error) {
-        messageEl.textContent = "Erreur de connexion au serveur.";
-        console.error("Erreur réseau :", error);
+      } else {
+        messageEl.textContent = result.message || "Échec de la connexion. Vérifiez vos identifiants.";
       }
-    });
-  </script>
+
+    } catch (error) {
+      messageEl.textContent = "Erreur réseau ou serveur. Veuillez réessayer.";
+      console.error("Erreur réseau :", error);
+    }
+  });
+</script>
+
 
 </body>
 </html>

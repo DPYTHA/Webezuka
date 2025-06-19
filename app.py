@@ -253,6 +253,14 @@ def register1():
 def login1():
     return render_template('login.html')
 
+@app.route('/dashboard')
+def dashboard1():
+    return render_template('dashboard.html')
+
+
+@app.route('/admin')
+def admin1():
+    return render_template('admin.html')
 
 
 
