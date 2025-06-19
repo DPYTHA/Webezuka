@@ -25,7 +25,8 @@ from flask import Blueprint, request, jsonify
 load_dotenv()
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
+
 CORS(app, supports_credentials=True)
 colis_bp = Blueprint('colis', __name__)
 
@@ -50,6 +51,11 @@ bcrypt = Bcrypt(app)
 mail = Mail(app)
 jwt = JWTManager(app)
 app.secret_key = "ta_cle_secrete"
+
+
+with app.app_context():
+    db.create_all()
+
 
 # Configuration Flask-Login
 login_manager = LoginManager()
