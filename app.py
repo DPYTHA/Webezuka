@@ -280,22 +280,52 @@ def update_taux():
 # Routes
 @app.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    required_fields = ['nom', 'prenom', 'email', 'motdepasse', 'telephone', 'pays']
-    for field in required_fields:
-        if not data.get(field):
-            return jsonify({'message': f"Le champ '{field}' est requis."}), 400
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'message': 'Email déjà utilisé'}), 400
-    hashed_pw = generate_password_hash(data['motdepasse'])
-    devise = get_currency_by_country(data['pays'])
-    user = User(nom=data['nom'], prenom=data['prenom'], email=data['email'],
-                motdepasse=hashed_pw, telephone=data['telephone'], pays=data['pays'], devise=devise)
-    db.session.add(user)
-    db.session.commit()
-    send_email(user.email, "Bienvenue sur ÉZUKA", f"<h2>Bonjour {user.prenom}</h2><p>Bienvenue !</p>")
-    send_email(EMAIL_ADMIN, "Nouvelle inscription", f"<p>{user.nom} {user.prenom}</p>")
-    return jsonify({'message': 'Inscription réussie'}), 201
+    try:
+        data = request.get_json(force=True)
+        required_fields = ['nom', 'prenom', 'email', 'motdepasse', 'telephone', 'pays']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f"Le champ '{field}' est requis."}), 400
+
+        # Vérifie si l'email existe déjà
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'error': 'Email déjà utilisé.'}), 400
+
+        # Hash du mot de passe
+        hashed_pw = generate_password_hash(data['motdepasse'])
+
+        # Récupère la devise associée au pays
+        devise = get_currency_by_country(data['pays'].lower())
+        if not devise:
+            return jsonify({'error': "Pays non reconnu pour la devise."}), 400
+
+        # Crée l'utilisateur
+        user = User(
+            nom=data['nom'],
+            prenom=data['prenom'],
+            email=data['email'],
+            motdepasse=hashed_pw,
+            telephone=data['telephone'],
+            pays=data['pays'],
+            devise=devise
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        # Envoie des mails (try/catch recommandé ici aussi)
+        try:
+            send_email(user.email, "Bienvenue sur ÉZUKA", f"<h2>Bonjour {user.prenom}</h2><p>Bienvenue !</p>")
+            send_email(EMAIL_ADMIN, "Nouvelle inscription", f"<p>{user.nom} {user.prenom}</p>")
+        except Exception as mail_err:
+            print("Erreur d'envoi mail :", mail_err)
+
+        return jsonify({'message': 'Inscription réussie'}), 201
+
+    except Exception as e:
+        print("Erreur dans /register :", str(e))
+        return jsonify({'error': 'Erreur interne du serveur. Veuillez réessayer plus tard.'}), 500
+
 
 # Autres routes seront intégrées ici (login, transfert, etc.)
 

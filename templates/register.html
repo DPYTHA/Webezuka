@@ -89,64 +89,76 @@
     <p id="error"></p>
   </div>
 
-  <script>
-    // Map pays vers devise
-    const paysToDevise = {
-      "Côte d'Ivoire": "XOF",
-      "Mali": "XOF",
-      "Burkina-Faso": "XOF",
-      "Sénégal": "XOF",
-      "Cameroun": "XAF",
-      "Ghana": "GHS",
-      "Mauritanie": "XOF",
-      "Niger": "XOF",
-      "Congo-Kinshasa": "CDF",
-      "Bénin": "XOF",
-      "Togo": "XOF",
-      "Guinée-Conakry": "GNF",
-      "Russie": "RUB"
+ <script>
+  // === 1. Map des pays vers les devises ===
+  const paysToDevise = {
+    "Côte d'Ivoire": "XOF",
+    "Mali": "XOF",
+    "Burkina-Faso": "XOF",
+    "Sénégal": "XOF",
+    "Cameroun": "XAF",
+    "Ghana": "GHS",
+    "Mauritanie": "XOF",
+    "Niger": "XOF",
+    "Congo-Kinshasa": "CDF",
+    "Bénin": "XOF",
+    "Togo": "XOF",
+    "Guinée-Conakry": "GNF",
+    "Russie": "RUB"
+  };
+
+  // === 2. Changement de pays => mise à jour de la devise ===
+  document.getElementById('pays').addEventListener('change', function () {
+    const selectedPays = this.value;
+    document.getElementById('devise').value = paysToDevise[selectedPays] || '';
+  });
+
+  // === 3. Soumission du formulaire d'inscription ===
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const messageEl = document.getElementById('error');
+    messageEl.innerText = '';
+
+    const data = {
+      nom: form.nom.value.trim(),
+      prenom: form.prenom.value.trim(),
+      email: form.email.value.trim(),
+      motdepasse: form.motdepasse.value,
+      telephone: form.telephone.value.trim(),
+      pays: form.pays.value,
+      devise: form.devise.value
     };
 
-    document.getElementById('pays').addEventListener('change', function () {
-      const selectedPays = this.value;
-      document.getElementById('devise').value = paysToDevise[selectedPays] || '';
-    });
+    try {
+      const res = await fetch('https://webezuka-production.up.railway.app/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
 
-    document.getElementById('registerForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const form = e.target;
-
-      const data = {
-        nom: form.nom.value.trim(),
-        prenom: form.prenom.value.trim(),
-        email: form.email.value.trim(),
-        motdepasse: form.motdepasse.value,
-        telephone: form.telephone.value.trim(),
-        pays: form.pays.value,
-        devise: form.devise.value
-      };
-
+      let result;
       try {
-        const res = await fetch('https://webezuka-production.up.railway.app/register',
-       {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-        document.getElementById('error').innerText = result.message;
-
-        if (res.ok) {
-          alert("✅ Inscription réussie !");
-          window.location.href = "/login";
-        }
-      } catch (err) {
-        console.error(err);
-        document.getElementById('error').innerText = "❌ Erreur de connexion au serveur.";
+        result = await res.json();
+      } catch (jsonErr) {
+        const text = await res.text(); // HTML d'erreur
+        console.error('Réponse non JSON :', text);
+        messageEl.innerText = "❌ Erreur du serveur (réponse non JSON).";
+        return;
       }
-    });
-  </script>
+
+      if (res.ok) {
+        alert("✅ Inscription réussie !");
+        window.location.href = "/login";
+      } else {
+        messageEl.innerText = `❌ ${result.error || result.message || "Erreur d'inscription."}`;
+      }
+    } catch (err) {
+      console.error('Erreur réseau :', err);
+      messageEl.innerText = "❌ Erreur de connexion au serveur.";
+    }
+  });
+</script>
 
 </body>
 </html>
