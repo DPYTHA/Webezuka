@@ -53,8 +53,13 @@ jwt = JWTManager(app)
 app.secret_key = "ta_cle_secrete"
 
 
-with app.app_context():
-    db.create_all()
+
+
+@app.route("/test-db")
+def test_db():
+    users = User.query.all()
+    return jsonify([u.email for u in users])
+
 
 
 # Configuration Flask-Login
@@ -156,6 +161,8 @@ class Taux(db.Model):
     valeur = db.Column(db.Numeric(10, 4), nullable=False)
 
   
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
