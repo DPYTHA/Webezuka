@@ -64,6 +64,7 @@ login_manager.init_app(app)
 
 # Modèles
 class User(db.Model):
+    __tablename__ = 'utilisateur'  # ✅ renomme ta table ici
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(100), nullable=False)
     prenom = db.Column(db.String(100), nullable=False)
