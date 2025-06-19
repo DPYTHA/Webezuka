@@ -246,6 +246,14 @@ def splash():
 @app.route('/home')
 def home():
     return render_template('home.html')
+@app.route('/register')
+def register1():
+    return render_template('register.html')
+@app.route('/login')
+def login1():
+    return render_template('register.html')
+
+
 
 
 @app.route('/api/taux', methods=['POST'])
