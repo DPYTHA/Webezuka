@@ -67,6 +67,11 @@ login_manager = LoginManager()
 login_manager.login_view = 'login'  # page de connexion
 login_manager.init_app(app)
 
+
+# 🔁 Création directe au chargement (fonctionne même sur Railway)
+with app.app_context():
+    db.create_all()
+
 # Modèles
 class User(db.Model):
     __tablename__ = 'utilisateur'  # ✅ renomme ta table ici
@@ -1209,8 +1214,7 @@ def export_taux_to_json():
 
 # ----------------
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Crée la table User si inexistante
+
 
         # Charger taux.json
         TAX_FILE = os.path.join(os.path.dirname(__file__), 'taux.json')
@@ -1231,5 +1235,5 @@ if __name__ == '__main__':
     
    
 
-    app.run(host="0.0.0.0", port=5000, debug=True)
+app.run(host="0.0.0.0", port=5000, debug=True)
 
