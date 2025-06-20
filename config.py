@@ -8,4 +8,4 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = 'moua19878@gmail.com'  # 🔁 à remplacer
-    MAIL_PASSWORD = 'yebymjdfpwjqsevt'     # 🔁 à remplacer (mot de passe d'application Gmail)
+    MAIL_PASSWORD = 'nygojgrubmqseqkq'     # 🔁 à remplacer (mot de passe d'application Gmail)
