@@ -273,7 +273,13 @@ def login1():
 @app.route('/dashboard')
 def dashboard1():
     return render_template('dashboard.html')
+@app.route('/admin')
+def admin1():
+    return render_template('admin.html')
 
+@app.route('/tracking')
+def tracking1():
+    return render_template('tracking.html')
 
 @app.route('/transfert')
 def transfert1():
