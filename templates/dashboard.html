@@ -181,7 +181,7 @@ document.getElementById('userInfo').innerText = `${prenom} ${nom} `;
 // Simuler affichage du solde (à remplacer par un fetch dynamique si besoin)
 const userEmail = utilisateur.email || '';
 
-fetch(`http://localhost:5000/get-solde?email=${userEmail}`)
+fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
   .then(res => res.json())
   .then(data => {
     if (data.solde !== undefined) {

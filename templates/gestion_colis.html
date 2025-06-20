@@ -154,7 +154,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("http://127.0.0.1:5000/admin/colis")
+      fetch("https://luminous-clarity-production.up.railway.app/admin/colis")
         .then(res => res.json())
         .then(data => {
           if (data.success) {
@@ -213,7 +213,7 @@
   badge.className = "badge " + getBadgeClass(nouveauStatut);
 
   // Envoi de la mise à jour au backend
-  fetch("http://127.0.0.1:5000/api/colis/statut", {
+  fetch("https://luminous-clarity-production.up.railway.app/api/colis/statut", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -243,7 +243,7 @@
   let tousLesColis = [];
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://127.0.0.1:5000/admin/colis")
+    fetch("https://luminous-clarity-production.up.railway.app/admin/colis")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -323,7 +323,7 @@
     badge.textContent = nouveauStatut;
     badge.className = "badge " + getBadgeClass(nouveauStatut);
 
-    fetch("http://127.0.0.1:5000/api/colis/statut", {
+    fetch("https://luminous-clarity-production.up.railway.app/api/colis/statut", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

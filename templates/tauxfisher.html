@@ -59,7 +59,7 @@
 let tauxConversion = {};
 
 function loadTaux() {
-  fetch("http://127.0.0.1:5000/api/taux")
+  fetch("https://luminous-clarity-production.up.railway.app/api/taux")
     .then(res => res.json())
     .then(data => {
       tauxConversion = data;
@@ -108,7 +108,7 @@ function saveTaux() {
 
   console.log("Taux envoyés :", updated);
 
-  fetch("http://127.0.0.1:5000/api/taux", {
+  fetch("https://luminous-clarity-production.up.railway.app/api/taux", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updated)

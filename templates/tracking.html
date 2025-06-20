@@ -153,7 +153,7 @@
         return;
       }
 
-      fetch(`http://127.0.0.1:5000/colis/track?code_colis=${code}`)
+      fetch(`https://luminous-clarity-production.up.railway.app/colis/track?code_colis=${code}`)
         .then(res => res.json())
         .then(data => {
           if (!data.success) {

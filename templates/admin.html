@@ -239,7 +239,7 @@
 
 <script>
 function sendAction(action, type, id, button) {
-  fetch(`http://127.0.0.1:5000/${action}/${type}/${id}`, {
+  fetch(`https://luminous-clarity-production.up.railway.app/${action}/${type}/${id}`, {
     method: 'POST'
   })
   .then(response => response.json())
@@ -279,7 +279,7 @@ function logout() {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   // API : utilisateurs
-  fetch("http://127.0.0.1:5000/api/users")
+  fetch("https://luminous-clarity-production.up.railway.app/api/users")
     .then(res => res.json())
     .then(data => {
       const tbody = document.querySelectorAll("table")[0].querySelector("tbody");
@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // API : dépôts
-  fetch("http://127.0.0.1:5000/api/depots")
+  fetch("https://luminous-clarity-production.up.railway.app/api/depots")
     .then(res => res.json())
     .then(data => {
       const tbody = document.querySelectorAll("table")[1].querySelector("tbody");
@@ -328,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // API : transferts
-fetch("http://127.0.0.1:5000//api/transfertsBoard")
+fetch("https://luminous-clarity-production.up.railway.app/api/transfertsBoard")
    .then(res => res.json())
   .then(data => {
     const tbody = document.querySelectorAll("table")[2].querySelector("tbody");
@@ -357,7 +357,7 @@ fetch("http://127.0.0.1:5000//api/transfertsBoard")
 
 
   // API : retraits
-  fetch("http://127.0.0.1:5000/api/retraits")
+  fetch("https://luminous-clarity-production.up.railway.app/api/retraits")
     .then(res => res.json())
     .then(data => {
       const tbody = document.querySelectorAll("table")[3].querySelector("tbody");
@@ -382,7 +382,7 @@ fetch("http://127.0.0.1:5000//api/transfertsBoard")
     });
 
   // API : colis
-  fetch("http://127.0.0.1:5000/api/colis")
+  fetch("https://luminous-clarity-production.up.railway.app/api/colis")
     .then(res => res.json())
     .then(data => {
       const tbody = document.querySelectorAll("table")[4].querySelector("tbody");

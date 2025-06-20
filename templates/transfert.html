@@ -216,7 +216,7 @@
      let tauxConversion = {};
    
 
-fetch('http://127.0.0.1:5000/api/taux')
+fetch('https://luminous-clarity-production.up.railway.app/api/taux')
   .then(res => res.json())
   .then(data => {
     console.log("Taux récupérés avec succès :", data);
@@ -256,7 +256,7 @@ fetch('http://127.0.0.1:5000/api/taux')
   let tauxConversion = {};
 
   // Charger les taux de conversion d'abord
-  fetch('http://127.0.0.1:5000/api/taux')
+  fetch('https://luminous-clarity-production.up.railway.app/api/taux')
     .then(res => res.json())
     .then(data => {
       console.log("Taux récupérés avec succès :", data);
@@ -283,7 +283,7 @@ function initialiserTransfert(utilisateur, devise, tauxConversion) {
   recapDevise.textContent = devise;
 
   const userEmail = utilisateur.email;
-  fetch(`http://127.0.0.1:5000/get-solde?email=${userEmail}`)
+  fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
     .then(res => res.json())
     .then(data => {
       if (data.solde !== undefined) {
@@ -367,7 +367,7 @@ function initialiserTransfert(utilisateur, devise, tauxConversion) {
       mode_paiement: document.getElementById("mode_paiement").value
     };
 
-    fetch("http://192.168.1.5:5000/api/transfert", {
+    fetch("https://luminous-clarity-production.up.railway.app/api/transfert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)

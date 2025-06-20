@@ -112,7 +112,7 @@
 
   // Récupérer le solde
   const userEmail = utilisateur.email || "";
-  fetch(`http://localhost:5000/get-solde?email=${userEmail}`)
+  fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
     .then(res => res.json())
     .then(data => {
       if (data.solde !== undefined) {
@@ -167,7 +167,7 @@
       devise: devise
     };
 
-    fetch("http://localhost:5000/retrait", {
+    fetch("https://luminous-clarity-production.up.railway.app/retrait", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
