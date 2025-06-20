@@ -277,6 +277,15 @@ def dashboard1():
 def admin1():
     return render_template('admin.html')
 
+@app.route('/gestion_colis')
+def gestion_colis1():
+    return render_template('gestion_colis.html')
+
+@app.route('/tauxfisher')
+def tauxfisher1():
+    return render_template('tauxfisher.html')
+
+
 @app.route('/tracking')
 def tracking1():
     return render_template('tracking.html')

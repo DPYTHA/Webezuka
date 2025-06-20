@@ -136,8 +136,8 @@
   <header>
     <h1>E$UKA CONTROL</h1>
     <div class="header-buttons">
-      <a class="colis"  href="gestion_colis.html"> Gestion Colis</a>
-      <a href="tauxfisher.html"><button class="taux">Taux-Fisher</button></a>
+      <a class="colis"  href="/gestion_colis"> Gestion Colis</a>
+      <a href="/tauxfisher"><button class="taux">Taux-Fisher</button></a>
       <button  class="logout"   onclick="logout()">Déconnexion</button>
     </div>
   </header>
@@ -273,7 +273,7 @@ function sendAction(action, type, id, button) {
 
 function logout() {
   localStorage.clear();
-  window.location.href = 'home.html';
+  window.location.href = '/home';
 }
 </script>
 
