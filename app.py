@@ -163,7 +163,9 @@ class Taux(db.Model):
     valeur = db.Column(db.Numeric(10, 4), nullable=False)
 
   
-
+# Créer les tables
+with app.app_context():
+    db.create_all()
 
 
 @login_manager.user_loader
@@ -1204,37 +1206,6 @@ def export_taux_to_json():
         return jsonify({"error": str(e)}), 500
 
 
-
-
-
-
-
-# ----------------
-if __name__ == '__main__':
-
-# 🔁 Création directe au chargement (fonctionne même sur Railway)
- with app.app_context():
-     db.create_all()
-
-        # Charger taux.json
-     TAX_FILE = os.path.join(os.path.dirname(__file__), 'taux.json')
-     with open(TAX_FILE, 'r') as file:
-            taux_data = json.load(file)
-            print("✔ JSON chargé :", taux_data)
-
-    
-
-     db.session.query(Taux).delete()  # Facultatif : vider la table
-     
-     for from_devise, to_dict in taux_data.items():
-      for to_devise, valeur in to_dict.items():
-                taux = Taux(devise_from=from_devise, devise_to=to_devise, valeur=valeur)
-                db.session.add(taux)
-
-     db.session.commit()
-     print("✅ Données insérées depuis taux.json")
-    
-   
 
 
 
