@@ -101,6 +101,7 @@ class Depot(db.Model):
 
 # --- MODELE DE BASE DE DONNÉES ---
 class Transfert(db.Model):
+    __tablename__ = 'transfert'
     id = db.Column(db.Integer, primary_key=True)
     
     expediteur_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Clé étrangère vers utilisateur
@@ -122,6 +123,7 @@ class Transfert(db.Model):
 
 
 class Retrait(db.Model):
+    __tablename__ = 'retrait'
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(100), nullable=False)
     telephone = db.Column(db.String(20), nullable=False)
@@ -138,6 +140,7 @@ class Retrait(db.Model):
 
 # === 1. MODELE COLIS ===
 class Colis(db.Model):
+    __tablename__ = 'colis'
     id = db.Column(db.Integer, primary_key=True)
     code_colis = db.Column(db.String(100), unique=True, nullable=False)
     expediteur_nom = db.Column(db.String(100), nullable=False)
