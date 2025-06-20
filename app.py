@@ -41,6 +41,8 @@ app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 465))
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'True').lower() == 'true'
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEBUG'] = True
+
 
 EMAIL_SENDER = app.config['MAIL_USERNAME']
 EMAIL_ADMIN = "moua19878@gmail.com"
@@ -666,6 +668,7 @@ Date : {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
         mail.send(admin_msg)
 
     except Exception as e:
+        app.logger.error(f"Erreur envoi mail: {e}")
         return jsonify({
             "success": True,
             "message": "Transfert OK mais échec de l'envoi d'email",
