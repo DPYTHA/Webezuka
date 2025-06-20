@@ -104,7 +104,7 @@ class Transfert(db.Model):
     __tablename__ = 'transfert'
     id = db.Column(db.Integer, primary_key=True)
     
-    expediteur_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Clé étrangère vers utilisateur
+    expediteur_id = db.Column(db.Integer, db.ForeignKey('utilisateur.id'))  # Clé étrangère vers utilisateur
     expediteur_nom = db.Column(db.String(100))
     expediteur_email = db.Column(db.String(100))
     
