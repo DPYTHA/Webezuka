@@ -273,9 +273,25 @@ def dashboard1():
     return render_template('dashboard.html')
 
 
-@app.route('/admin')
-def admin1():
-    return render_template('admin.html')
+@app.route('/transfert')
+def transfert1():
+    return render_template('transfert.html')
+
+@app.route('/deposit')
+def deposit1():
+    return render_template('deposit.html')
+@app.route('/retrait')
+def retrait1():
+    return render_template('retrait.html')
+@app.route('/bussiness')
+def bussiness1():
+    return render_template('bussiness.html')
+@app.route('/sendColis')
+def sendColis1():
+    return render_template('sendColis.html')
+@app.route('/receiptcolis')
+def receiptcolis1():
+    return render_template('receiptcolis.html')
 
 
 
