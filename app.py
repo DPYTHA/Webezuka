@@ -361,18 +361,54 @@ def register():
         db.session.commit()
 
         # Envoie des mails (try/catch recommandé ici aussi)
+        # ✅ Envoi de l'email de bienvenue + notification à l'admin
         try:
-            send_email(user.email, "Bienvenue sur ÉZUKA", f"<h2>Bonjour {user.prenom}</h2><p>Bienvenue !</p>")
-            send_email(EMAIL_ADMIN, "Nouvelle inscription", f"<p>{user.nom} {user.prenom}</p>")
-        except Exception as mail_err:
-            print("Erreur d'envoi mail :", mail_err)
+            send_email(
+                user.email,
+                "Bienvenue sur ÉZUKA",
+                f"""
+                <h2>Bonjour {user.prenom},</h2>
+                <p>🎉 <strong>Bienvenue sur votre compte ÉZUKA !</strong> Vous êtes maintenant enregistré(e) avec succès.</p>
 
+                <p>💼 Vous pouvez désormais envoyer et recevoir de l'argent en toute sécurité.</p>
+
+                <p>🌍 Les transferts sont disponibles entre les pays suivants :</p>
+                <ul>
+                    <li>Côte d'Ivoire (XOF)</li>
+                    <li>Mali (XOF)</li>
+                    <li>Burkina-Faso (XOF)</li>
+                    <li>Sénégal (XOF)</li>
+                    <li>Cameroun (XAF)</li>
+                    <li>Ghana (GHS)</li>
+                    <li>Mauritanie (MRU)</li>
+                    <li>Niger (XOF)</li>
+                    <li>Congo-Kinshasa (CDF)</li>
+                    <li>Bénin (XOF)</li>
+                    <li>Togo (XOF)</li>
+                    <li>Guinée-Conakry (GNF)</li>
+                    <li>Russie (RUB)</li>
+                </ul>
+
+                <p>📲 Pour toute assistance, notre équipe est disponible de 9h à 20h (heure de Moscou).</p>
+
+                <p>Merci de faire confiance à <strong>ÉZUKA</strong> !</p>
+                """
+            )
+
+            send_email(
+                EMAIL_ADMIN,
+                "Nouvelle inscription sur ÉZUKA",
+                f"<p><strong>{user.nom} {user.prenom}</strong> vient de s'inscrire.</p>"
+            )
+        except Exception as mail_err:
+            print("Erreur d'envoi de mail :", mail_err)
+
+        # ✅ Réponse finale
         return jsonify({'message': 'Inscription réussie'}), 201
 
     except Exception as e:
         print("Erreur dans /register :", str(e))
         return jsonify({'error': 'Erreur interne du serveur. Veuillez réessayer plus tard.'}), 500
-
 
 # Autres routes seront intégrées ici (login, transfert, etc.)
 
