@@ -992,29 +992,23 @@ def create_colis():
     return jsonify({"success": True, "code_colis": nouveau_colis.code_colis})
 
 # === 3. ROUTE MISE À JOUR DU STATUT ===
-@app.route('/api/colis/statut', methods=['POST'])
-def update_statut_colis():
+@app.route('/api/update-solde', methods=['POST'])
+def update_solde():
     data = request.get_json()
-    code_colis = data.get('code_colis')
-    nouveau_statut = data.get('nouveau_statut')
+    user_id = data.get('id')
+    new_solde = data.get('solde')
 
-    if not code_colis or not nouveau_statut:
-        return jsonify({"success": False, "message": "Champs manquants"}), 400
-
-    colis = Colis.query.filter_by(code_colis=code_colis).first()
-    if not colis:
-        return jsonify({"success": False, "message": "Colis introuvable"}), 404
-
-    colis.statut = nouveau_statut
-    colis.date_maj = datetime.now()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'success': False, 'message': 'Utilisateur non trouvé'}), 404
 
     try:
+        user.solde = float(new_solde)
         db.session.commit()
-        return jsonify({"success": True, "message": "Statut mis à jour"})
+        return jsonify({'success': True})
     except Exception as e:
-        db.session.rollback()
-        return jsonify({"success": False, "message": str(e)}), 500
-
+        print("Erreur update solde:", e)
+        return jsonify({'success': False, 'message': 'Erreur interne'}), 500
 
 
 

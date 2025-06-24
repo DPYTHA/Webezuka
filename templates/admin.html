@@ -294,11 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${user.email}</td>
            <td>${user.telephone}</td> <!-- ajout -->
            <td>${user.pays}</td>
-           <td>
-  <input type="number" min="0" value="${user.solde}" 
-         onchange="updateSolde(${user.id}, this.value)" 
-         style="width: 80px; padding: 4px; border-radius: 5px; border: 1px solid #ccc;" />
-          </td>
+          <td>
+  <input type="number" id="solde-${user.id}" value="${user.solde}" style="width: 80px; margin-right: 5px;">
+  <button class="btn btn-valide" onclick="updateSolde(${user.id})">Enregistrer</button>
+</td>
+
     <!-- ajout -->
           <td>
             <button class="btn-attente" onclick="sendAction('valider', 'user', ${user.id}, this)">En attente</button>
@@ -431,6 +431,38 @@ fetch("https://luminous-clarity-production.up.railway.app/api/transfertsBoard")
     });
   });
 </script>
+<script>
+function updateSolde(userId) {
+  const inputEl = document.getElementById(`solde-${userId}`);
+  const newSolde = parseFloat(inputEl.value);
+
+  if (isNaN(newSolde)) {
+    alert("❌ Solde invalide !");
+    return;
+  }
+
+  if (!confirm("Confirmer la modification du solde ?")) return;
+
+  fetch("https://luminous-clarity-production.up.railway.app/api/update-solde", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id: userId, solde: newSolde })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("✅ Solde mis à jour avec succès !");
+    } else {
+      alert("❌ Erreur : " + (data.message || "Échec de la mise à jour."));
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Erreur réseau ou serveur.");
+  });
+}
+</script>
+
 
 </body>
 </html>
