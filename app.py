@@ -611,6 +611,29 @@ L’équipe ÉZUKA
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+
+#Modifier le solde lors du depots dans admin dashboard
+
+@app.route('/api/update-solde', methods=['POST'])
+def update_solde():
+    data = request.get_json()
+    user_id = data.get('id')
+    new_solde = data.get('solde')
+
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"success": False, "message": "Utilisateur introuvable"}), 404
+
+        user.solde = new_solde
+        db.session.commit()
+        return jsonify({"success": True}), 200
+
+    except Exception as e:
+        print("Erreur mise à jour solde :", e)
+        return jsonify({"success": False, "message": "Erreur serveur"}), 500
+
 
 
 # 🚀 Transfert

@@ -294,7 +294,12 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${user.email}</td>
            <td>${user.telephone}</td> <!-- ajout -->
            <td>${user.pays}</td>
-           <td>${user.solde}</td>     <!-- ajout -->
+           <td>
+  <input type="number" min="0" value="${user.solde}" 
+         onchange="updateSolde(${user.id}, this.value)" 
+         style="width: 80px; padding: 4px; border-radius: 5px; border: 1px solid #ccc;" />
+          </td>
+    <!-- ajout -->
           <td>
             <button class="btn-attente" onclick="sendAction('valider', 'user', ${user.id}, this)">En attente</button>
             <button class="btn btn-annule" onclick="sendAction('annuler', 'user', ${user.id}, this)">Annuler</button>
