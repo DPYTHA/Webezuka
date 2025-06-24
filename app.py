@@ -354,7 +354,7 @@ def register():
             motdepasse=hashed_pw,
             telephone=data['telephone'],
             pays=data['pays'],
-            devise= data['devise']
+            devise= devise
         )
 
         db.session.add(user)
