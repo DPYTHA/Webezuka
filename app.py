@@ -993,7 +993,7 @@ def create_colis():
 
 # === 3. ROUTE MISE À JOUR DU STATUT ===
 @app.route('/api/update-solde', methods=['POST'])
-def update_solde():
+def update_solde3():
     data = request.get_json()
     user_id = data.get('id')
     new_solde = data.get('solde')
