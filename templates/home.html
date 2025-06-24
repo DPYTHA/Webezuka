@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Favicon -->
+<link rel="webicon"href="static/images/logo.png">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#082630">
+<link rel="apple-touch-icon" href="/static/images/logo.png">
   <title>E$UKA - Accueil</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/png" href="static/images/logo.png">
@@ -175,5 +180,13 @@
   </a>
   <div class="whatsapp-bulle">Besoin d’aide ?</div>
 </div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/sw.js')
+      .then(reg => console.log("✅ Service Worker enregistré :", reg.scope))
+      .catch(err => console.warn("❌ Échec de l'enregistrement :", err));
+  }
+</script>
 </body>
 </html>

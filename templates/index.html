@@ -10,7 +10,11 @@
   <title>E$UKA - Splash Screen</title>
 
   <!-- Favicon -->
-<link rel="webicon"href="static/images/LogoScan.png">
+<link rel="webicon"href="static/images/logo.png">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#082630">
+<link rel="apple-touch-icon" href="/static/images/logo.png">
+
 
   <!-- Splash Design -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
@@ -99,4 +103,11 @@
     <div class="slogan">"L'argent, ça va et ça vient"</div>
   </div>
 </body>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/sw.js')
+      .then(reg => console.log("✅ Service Worker enregistré :", reg.scope))
+      .catch(err => console.warn("❌ Échec de l'enregistrement :", err));
+  }
+</script>
 </html>
