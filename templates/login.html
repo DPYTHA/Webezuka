@@ -2,60 +2,94 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/static/LogoScan.png" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Connexion - ÉZUKA</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f1f1f1;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      margin-top: 60px;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
     }
+
     .container {
       background: #fff;
       padding: 30px;
       border-radius: 10px;
-      width: 350px;
+      width: 100%;
+      max-width: 400px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     img.logo {
+      width: 100px;
       border-radius: 50%;
-      width: 120px;
       margin-bottom: 20px;
     }
+
     input {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
+      padding: 12px;
+      margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 5px;
+      font-size: 16px;
     }
+
     button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background-color: #082630;
       color: white;
       border: none;
       border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
-      margin-top: 10px;
     }
+
     button:hover {
       background-color: #009acd;
     }
+
+    i {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    i a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    i a:hover {
+      text-decoration: underline;
+    }
+
     #message {
       margin-top: 10px;
       color: red;
+      font-size: 15px;
+    }
+
+    @media (max-width: 480px) {
+      input, button {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <img src="/static/images/LogoScan.png" alt="ÉZUKA" class="logo" />
     <h2>Connexion</h2>
@@ -64,75 +98,64 @@
       <input type="password" name="motdepasse" placeholder="Mot de passe" required />
       <button type="submit">Se connecter</button>
     </form>
-    <br>
     <i>Nouvel utilisateur ? <a href="/register">Enregistrez-vous</a></i>
     <p id="message"></p>
   </div>
 
   <script>
-  document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(this));
-    const messageEl = document.getElementById('message');
-    messageEl.textContent = '';
+      const data = Object.fromEntries(new FormData(this));
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = '';
 
-    try {
-      const res = await fetch('https://luminous-clarity-production.up.railway.app/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+      try {
+        const res = await fetch('https://luminous-clarity-production.up.railway.app/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
 
-      // ✅ Sécurité : vérifie que la réponse est bien du JSON
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Réponse invalide du serveur (pas JSON)");
-      }
-
-      const result = await res.json();
-
-      // ✅ Si la réponse est correcte
-      if (res.ok && result.token) {
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("prenom", result.prenom || '');
-        localStorage.setItem("nom", result.nom || '');
-        localStorage.setItem("email", result.email || '');
-        localStorage.setItem("role", result.role || '');
-        localStorage.setItem("devise", result.devise || '');
-        localStorage.setItem("pays", result.pays || '');
-
-        localStorage.setItem("utilisateurConnecte", JSON.stringify({
-          nom: result.nom || '',
-          prenom: result.prenom || '',
-          email: result.email || '',
-          role: result.role || '',
-          devise: result.devise || '',
-          pays: result.pays || ''
-        }));
-
-        alert("Connexion réussie !");
-
-        // Redirection selon rôle
-        if (result.role === 'admin') {
-          window.location.href = '/admin';
-        } else {
-          window.location.href = '/dashboard';
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Réponse invalide du serveur (non JSON)");
         }
 
-      } else {
-        messageEl.textContent = result.message || "Échec de la connexion. Vérifiez vos identifiants.";
+        const result = await res.json();
+
+        if (res.ok && result.token) {
+          // Stockage
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("prenom", result.prenom || '');
+          localStorage.setItem("nom", result.nom || '');
+          localStorage.setItem("email", result.email || '');
+          localStorage.setItem("role", result.role || '');
+          localStorage.setItem("devise", result.devise || '');
+          localStorage.setItem("pays", result.pays || '');
+
+          localStorage.setItem("utilisateurConnecte", JSON.stringify({
+            nom: result.nom || '',
+            prenom: result.prenom || '',
+            email: result.email || '',
+            role: result.role || '',
+            devise: result.devise || '',
+            pays: result.pays || ''
+          }));
+
+          alert("Connexion réussie !");
+          window.location.href = result.role === 'admin' ? '/admin' : '/dashboard';
+        } else {
+          messageEl.textContent = result.message || "Échec de la connexion. Vérifiez vos identifiants.";
+        }
+
+      } catch (error) {
+        messageEl.textContent = "Erreur réseau ou serveur. Veuillez réessayer.";
+        console.error("Erreur réseau :", error);
       }
-
-    } catch (error) {
-      messageEl.textContent = "Erreur réseau ou serveur. Veuillez réessayer.";
-      console.error("Erreur réseau :", error);
-    }
-  });
-</script>
-
-
+    });
+  </script>
 </body>
 </html>

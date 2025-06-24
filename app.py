@@ -1162,6 +1162,48 @@ def taux_handlerDashboard():
     return jsonify({"error": "Méthode non autorisée"}), 405
 
 
+@app.route('/supprimer/user/<int:user_id>', methods=['POST'])
+def supprimer_utilisateur(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"success": False, "message": "Utilisateur introuvable"}), 404
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"success": True, "message": "Utilisateur supprimé"})
+
+
+@app.route('/modifier/user/<int:user_id>', methods=['POST'])
+def modifier_utilisateur(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"success": False, "message": "Utilisateur introuvable"}), 404
+
+    data = request.get_json()
+
+    # Mise à jour sécurisée
+    user.nom = data.get('nom', user.nom)
+    user.prenom = data.get('prenom', user.prenom)
+    user.email = data.get('email', user.email)
+    user.telephone = data.get('telephone', user.telephone)
+    user.pays = data.get('pays', user.pays)
+    user.solde = float(data.get('solde', user.solde))
+    user.devise = data.get('devise', user.devise)
+
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Utilisateur modifié", "user": {
+        "id": user.id,
+        "nom": user.nom,
+        "prenom": user.prenom,
+        "email": user.email,
+        "telephone": user.telephone,
+        "pays": user.pays,
+        "solde": user.solde,
+        "devise": user.devise
+    }})
+
+
+
 #taux dans postgresql
 
 # Route GET & POST
