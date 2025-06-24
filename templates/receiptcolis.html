@@ -5,51 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Annonces – Transport de Colis</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #fff;
-      padding: 40px;
-      margin-top: 50px;
+      padding: 20px;
+      margin: 0;
       color: #222;
       line-height: 1.6;
     }
+
     h1 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin: 40px 0 30px;
+      text-align: center;
     }
+
     .annonce {
       margin-bottom: 30px;
     }
+
     .annonce h2 {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
+
     .annonce p {
       font-size: 16px;
       white-space: pre-line;
     }
-    .annonceFine{
-       font-size: 16px;
-      white-space: pre-line;
+
+    .annonceFine {
       display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
     }
-     .tracking {
-      margin-left: 130px;
-     }
-    .tracking button{
+
+    .annonce2 {
+      flex: 1 1 300px;
+    }
+
+    .tracking {
+      flex: 1 1 300px;
+      text-align: center;
+    }
+
+    .tracking p {
+      margin-bottom: 15px;
+    }
+
+    .tracking button {
       background-color: #194878;
-      width: 220px;
-      height: 60px;
-      
-      
+      width: 100%;
+      max-width: 220px;
+      height: 50px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
-     .tracking a{
+
+    .tracking a {
+      display: block;
       color: white;
-      font-size: 20px;
+      font-size: 18px;
       text-decoration: none;
-     }
+      padding: 14px 0;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      .annonce h2 {
+        font-size: 18px;
+      }
+
+      .annonce p, .annonce2 p {
+        font-size: 15px;
+      }
+
+      .tracking button {
+        width: 100%;
+        height: auto;
+      }
+
+      .tracking a {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -65,23 +115,18 @@
   </div>
 
   <div class="annonceFine">
-      <div class="annonce2">
-        <h2>📢 Rappel :</h2>
-         <p>
-           Les colis doivent être pesés et emballés avant embarquement.
-            Nous emballons à notre office afin d’éviter les problèmes.
-             Aucun produit interdit ne sera accepté.
-        </p>
-     </div>
-     <div class="tracking">
-  <p><i>Recuperez le code tracker chez l'expediteur et suivez ici le statut de 
-    votre colis 
-  </i></p>
-  <button><a href="/tracking">Tracker Colis</a></button>
-  
-  
-  </div>
-
+    <div class="annonce2">
+      <h2>📢 Rappel :</h2>
+      <p>
+        Les colis doivent être pesés et emballés avant embarquement.
+        Nous emballons à notre office afin d’éviter les problèmes.
+        Aucun produit interdit ne sera accepté.
+      </p>
+    </div>
+    <div class="tracking">
+      <p><i>Récupérez le code tracker chez l'expéditeur et suivez ici le statut de votre colis :</i></p>
+      <button><a href="/tracking">📦 Tracker Colis</a></button>
+    </div>
   </div>
 
   <div class="annonce">

@@ -2,64 +2,97 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="static/images/logo.png">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="static/images/logo.png">
   <title>Retrait d'argent</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: #0b1a3d;
       color: white;
       font-family: Arial, sans-serif;
+      margin: 0;
       padding: 20px;
     }
+
     h1, .solde {
       color: #80b3ff;
       text-align: center;
     }
+
     form {
       background: #112a66;
       padding: 20px;
       border-radius: 8px;
-      max-width: 400px;
+      max-width: 450px;
       margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
+
     label {
       display: block;
       margin-bottom: 8px;
       margin-top: 12px;
       font-weight: bold;
     }
+
     input, select {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       border-radius: 5px;
       border: none;
       margin-bottom: 12px;
-      box-sizing: border-box;
+      font-size: 16px;
     }
+
     button {
       background-color: #4a7df7;
       border: none;
       color: white;
-      padding: 10px 15px;
+      padding: 12px;
       font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
       width: 100%;
-      margin-top: 10px;
+      transition: background-color 0.3s;
     }
+
     button:hover {
       background-color: #3a6ad6;
     }
+
     .infos {
       font-size: 14px;
       color: #ffcc00;
       margin-bottom: 10px;
     }
+
     .message {
       text-align: center;
       margin-top: 15px;
       color: #ffd700;
+      font-size: 16px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      form {
+        padding: 15px;
+      }
+
+      input, select {
+        font-size: 15px;
+      }
+
+      .message {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
@@ -71,15 +104,17 @@
   </div>
 
   <form id="formulaireRetrait">
-    <label  style="display: none;" for="nom">Nom complet</label>
-    <input  style="display: none;" type="text" id="nom" name="nom" required />
+    <label style="display: none;" for="nom">Nom complet</label>
+    <input style="display: none;" type="text" id="nom" name="nom" required />
     <label style="display: none;" for="prenom">Prenom</label>
     <input style="display: none;" type="text" id="prenom" name="prenom" required />
-    <label for="tel">Téléphone du bénéficiaire</label>
-    <input type="tel" id="telephone" name="telephone" placeholder="+225xxxxxxxxxx" pattern="^\+[\d]{1,4}[\d\s\-]{6,14}$" required
-        oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Numéro invalide. Format attendu: +225xxxxxxxxxx')" />
 
-    <label for="montant">Montant à retirer </label>
+    <label for="tel">Téléphone du bénéficiaire</label>
+    <input type="tel" id="telephone" name="telephone" placeholder="+225xxxxxxxxxx"
+           pattern="^\+[\d]{1,4}[\d\s\-]{6,14}$" required
+           oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Numéro invalide. Format attendu: +225xxxxxxxxxx')" />
+
+    <label for="montant">Montant à retirer</label>
     <input type="number" id="montant" name="montant" min="100" required oninput="calculerFrais()" />
 
     <div class="infos" id="infosFrais">Frais : 1% | Montant reçu : -  | Total débité : - </div>
@@ -104,94 +139,94 @@
   <div class="message" id="message"></div>
 
   <script>
-  const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte")) || {};
-  let solde = 0;
-  const devise = utilisateur.devise || "FCFA";
+    const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte")) || {};
+    let solde = 0;
+    const devise = utilisateur.devise || "";
 
-  // Préremplir nom et prénom uniquement
-  document.getElementById("nom").value = utilisateur.nom || "";
-  document.getElementById("prenom").value = utilisateur.prenom || "";
+    // Préremplir nom et prénom
+    document.getElementById("nom").value = utilisateur.nom || "";
+    document.getElementById("prenom").value = utilisateur.prenom || "";
 
-  // Récupérer le solde
-  const userEmail = utilisateur.email || "";
-  fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.solde !== undefined) {
-        solde = parseFloat(data.solde);
-        document.getElementById('solde').innerText = solde.toLocaleString('fr-FR') + " " + devise;
-      } else {
-        throw new Error("Solde introuvable");
-      }
-    })
-    .catch(err => {
-      console.error("Erreur récupération solde :", err);
-      document.getElementById('solde').innerText = `Solde : -- ${devise}`;
-    });
+    // Récupérer le solde
+    const userEmail = utilisateur.email || "";
+    fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.solde !== undefined) {
+          solde = parseFloat(data.solde);
+          document.getElementById('solde').innerText = solde.toLocaleString('fr-FR') + " " + devise;
+        } else {
+          throw new Error("Solde introuvable");
+        }
+      })
+      .catch(err => {
+        console.error("Erreur récupération solde :", err);
+        document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+      });
 
-  function calculerFrais() {
-    const montant = parseFloat(document.getElementById("montant").value) || 0;
-    const frais = montant * 0.01;
-    const total = montant + frais;
-    document.getElementById("infosFrais").textContent =
-      `Frais : ${frais.toFixed(2)} ${devise} | Montant reçu : ${montant.toFixed(2)} ${devise} | Total débité : ${total.toFixed(2)} ${devise}`;
-  }
-
-  document.getElementById("formulaireRetrait").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const montant = parseFloat(document.getElementById("montant").value);
-    const frais = montant * 0.01;
-    const total = montant + frais;
-    const mode_paiement = document.getElementById("mode_paiement").value;
-    const telephone = document.getElementById("telephone").value.trim(); // saisi manuellement
-
-    // Vérifie si le champ téléphone est vide
-    if (!telephone) {
-      document.getElementById("message").textContent = "❌ Veuillez entrer votre numéro de téléphone.";
-      return;
+    function calculerFrais() {
+      const montant = parseFloat(document.getElementById("montant").value) || 0;
+      const frais = montant * 0.01;
+      const total = montant + frais;
+      document.getElementById("infosFrais").textContent =
+        `Frais : ${frais.toFixed(2)} ${devise} | Montant reçu : ${montant.toFixed(2)} ${devise} | Total débité : ${total.toFixed(2)} ${devise}`;
     }
 
-    if (total > solde) {
-      document.getElementById("message").textContent = "❌ Solde insuffisant pour ce retrait.";
-      return;
-    }
+    document.getElementById("formulaireRetrait").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-    const payload = {
-      email: utilisateur.email,
-      nom: utilisateur.nom,
-      telephone: telephone,
-      montant: montant,
-      frais: frais,
-      montant_debite: total,
-      montant_recu: montant,
-      mode_paiement: mode_paiement,
-      devise: devise
-    };
+      const montant = parseFloat(document.getElementById("montant").value);
+      const frais = montant * 0.01;
+      const total = montant + frais;
+      const mode_paiement = document.getElementById("mode_paiement").value;
+      const telephone = document.getElementById("telephone").value.trim();
 
-    fetch("https://luminous-clarity-production.up.railway.app/retrait", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success") {
-        solde -= total;
-        document.getElementById("solde").innerText = solde.toLocaleString('fr-FR') + " " + devise;
-        document.getElementById("message").textContent = `✅ Retrait validé. Vous recevrez ${montant.toFixed(2)} ${devise} dans moins de 5 minutes. Merci pour la confiance!`;
-        document.getElementById("formulaireRetrait").reset();
-        document.getElementById("infosFrais").textContent = "Frais : 1% | Montant reçu : -  | Total débité : - ";
-      } else {
-        document.getElementById("message").textContent = "❌ Erreur lors du retrait.";
+      if (!telephone) {
+        document.getElementById("message").textContent = "❌ Veuillez entrer votre numéro de téléphone.";
+        return;
       }
-    })
-    .catch(err => {
-      console.error("Erreur requête retrait :", err);
-      document.getElementById("message").textContent = "❌ Erreur serveur.";
+
+      if (total > solde) {
+        document.getElementById("message").textContent = "❌ Solde insuffisant pour ce retrait.";
+        return;
+      }
+
+      const payload = {
+        email: utilisateur.email,
+        nom: utilisateur.nom,
+        telephone: telephone,
+        montant: montant,
+        frais: frais,
+        montant_debite: total,
+        montant_recu: montant,
+        mode_paiement: mode_paiement,
+        devise: devise
+      };
+
+      fetch("https://luminous-clarity-production.up.railway.app/retrait", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          solde -= total;
+          document.getElementById("solde").innerText = solde.toLocaleString('fr-FR') + " " + devise;
+          document.getElementById("message").textContent =
+            `✅ Retrait validé. Vous recevrez ${montant.toFixed(2)} ${devise} dans moins de 5 minutes. Merci pour la confiance!`;
+          document.getElementById("formulaireRetrait").reset();
+          document.getElementById("infosFrais").textContent = "Frais : 1% | Montant reçu : -  | Total débité : - ";
+        } else {
+          document.getElementById("message").textContent = "❌ Erreur lors du retrait.";
+        }
+      })
+      .catch(err => {
+        console.error("Erreur requête retrait :", err);
+        document.getElementById("message").textContent = "❌ Erreur serveur.";
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
 </html>

@@ -1,107 +1,138 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-      <link rel="icon" type="image/png" href="static/images/logo.png">
-
-    <title>Dépôt Manuel</title>
+     <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="static/images/logo.png">
+  <title>Dépôt d'argent</title>
     <style>
-        body {
-           background-color: #0b1a2b;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        .container {
-            max-width: 300px;
-            margin: 90px auto;
-            background-color: #122b52;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        }
+    body {
+      background-color: #0b1a2b;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
 
-        h2 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
+    .container {
+      background-color: #122b52;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+      margin: 60px auto;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
 
-        input[type="text"],
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffffff;
-            color: #000;
-        }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #1e90ff;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffffff;
+      color: #000;
+    }
 
-        button:hover {
-            background-color: #0077e6;
-        }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1e90ff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-        }
+    button:hover {
+      background-color: #0077e6;
+    }
 
-        .modal-content {
-            background-color: #122b52;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            color: white;
-        }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+      padding: 10px;
+    }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .modal-content {
+      background-color: #122b52;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      color: white;
+      position: relative;
+    }
 
-        .chrono {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ff5e5e;
-            text-align: center;
-            margin-top: 15px;
-        }
-    </style>
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chrono {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff5e5e;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+        margin: 40px auto;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+
+      .modal-content {
+        padding: 18px;
+      }
+
+      .chrono {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
     <div class="container">

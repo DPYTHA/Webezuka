@@ -4,10 +4,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="static/images/logo.png">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="static/images/logo.png">
   <title>Transfert - ÉZUKA</title>
- <style>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #0b1a2b;
@@ -15,38 +19,41 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 40px 0;
+      margin: 0;
+      padding: 20px;
     }
+
     .container {
       background: #112f4c;
       padding: 30px;
       border-radius: 10px;
-      width: 390px;
+      max-width: 420px;
+      width: 100%;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
     }
+
     h2 {
       text-align: center;
       margin-bottom: 25px;
       font-weight: normal;
+      font-size: 24px;
     }
-    .solde{
+
+    .solde {
       text-align: center;
       background-color: #0b1a2b;
-      height: 50px;
-      width: 280px;
-      padding-top: 20px;
+      padding: 12px;
       border-radius: 10px;
-      margin-left: 50px;
       font-size: 17px;
+      margin-bottom: 20px;
     }
+
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
-    #devises{
-      display: none;
-    }
+
     input, select {
       width: 100%;
       padding: 10px;
@@ -56,10 +63,12 @@
       font-size: 16px;
       color: #0b1a2b;
     }
+
     input[readonly] {
       background-color: #ccc;
       color: #444;
     }
+
     button {
       margin-top: 25px;
       width: 100%;
@@ -73,13 +82,14 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #007acc;
     }
 
     /* MODALE */
     .modal {
-      display: none; /* cachée par défaut */
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0; top: 0;
@@ -88,26 +98,31 @@
       background-color: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
+      padding: 10px;
     }
+
     .modal-content {
       background-color: #004b87;
       padding: 30px;
       border-radius: 12px;
-      width: 80%;
+      width: 100%;
       max-width: 480px;
       color: white;
       position: relative;
       box-shadow: 0 0 20px rgba(0,0,0,0.9);
     }
+
     .modal-content h3 {
       margin-top: 0;
       margin-bottom: 15px;
       font-weight: normal;
     }
+
     .modal-content p {
       margin: 10px 0;
       font-size: 16px;
     }
+
     .close-btn {
       position: absolute;
       top: 12px;
@@ -117,6 +132,7 @@
       cursor: pointer;
       color: white;
     }
+
     #btnValider {
       margin-top: 20px;
       width: 100%;
@@ -128,8 +144,31 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     #btnValider:hover {
       background-color: #0099ff;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      .modal-content p {
+        font-size: 15px;
+      }
+
+      button, #btnValider {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
