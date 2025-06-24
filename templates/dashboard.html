@@ -172,35 +172,64 @@
   </div>
 
   <script>
-   const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte") );
+  const paysToDevise = {
+    "côte d'ivoire": "XOF",
+    "mali": "XOF",
+    "burkina-faso": "XOF",
+    "sénégal": "XOF",
+    "cameroun": "XAF",
+    "ghana": "GHS",
+    "mauritanie": "MRU",
+    "niger": "XOF",
+    "congo-kinshasa": "CDF",
+    "bénin": "XOF",
+    "togo": "XOF",
+    "guinée-conakry": "GNF",
+    "russie": "RUB"
+  };
 
-const prenom = utilisateur.prenom || '';
-const nom = utilisateur.nom || '';
-const pays = utilisateur.pays || ''; // valeur par défaut
- const devise = utilisateur.devise || ''; // ← récupérée automatiquement pendant le login
-document.getElementById('userInfo').innerText = `${prenom} ${nom} `;
-
-// Simuler affichage du solde (à remplacer par un fetch dynamique si besoin)
-const userEmail = utilisateur.email || '';
-
-fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
-  .then(res => res.json())
-  .then(data => {
-    if (data.solde !== undefined) {
-      document.getElementById('solde').innerText = `Solde : ${data.solde} ${devise}`;
+  document.addEventListener("DOMContentLoaded", () => {
+    const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte"));
+    if (!utilisateur) {
+      alert("Utilisateur non connecté !");
+      return;
     }
-  })
-  .catch(err => {
-    console.error("Erreur récupération solde :", err);
-    document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+
+    const prenom = utilisateur.prenom || '';
+    const nom = utilisateur.nom || '';
+    const pays = (utilisateur.pays || '').toLowerCase().trim();
+    
+    // 🟡 Correction ici : déduction automatique de la devise
+    let devise = utilisateur.devise;
+    if (!devise || devise.trim() === "") {
+      devise = paysToDevise[pays] || 'XOF'; // Par défaut XOF si pays non reconnu
+    }
+
+    document.getElementById('userInfo').innerText = `${prenom} ${nom}`;
+
+    const userEmail = utilisateur.email || '';
+
+    fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.solde !== undefined) {
+          document.getElementById('solde').innerText = `Solde : ${data.solde} ${devise}`;
+        } else {
+          document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+        }
+      })
+      .catch(err => {
+        console.error("Erreur récupération solde :", err);
+        document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+      });
   });
 
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/home';
+  }
+</script>
 
-    function logout() {
-      localStorage.clear();
-      window.location.href = '/home';
-    }
-  </script>
 <div class="whatsapp-container">
   <a href="https://wa.me/message/XTQKCCN4ZCN7L1" target="_blank" class="whatsapp-float">
     <img src="https://img.icons8.com/ios-filled/60/ffffff/whatsapp--v1.png" alt="Contact WhatsApp" />
