@@ -530,12 +530,12 @@ def enregistrer_depot():
 
               <div class="promo">
                 <h3>🔥 Promo Spéciale</h3>
-                <img src="https://via.placeholder.com/600x200.png?text=Promo+ÉZUKA+Juin" alt="Publicité Ezuka">
+                <img src="/static/images/PromoMrusse.png" alt="Publicité Ezuka">
                 <p><em>Profitez d’un bonus de 10% sur votre premier dépôt ce mois-ci !</em></p>
               </div>
 
               <div class="cta">
-                <a href="https://wa.me/2250757123619">Contacter notre support</a>
+                <a href="https://wa.me/79879040719">Contacter notre support</a>
               </div>
             </div>
           </div>
