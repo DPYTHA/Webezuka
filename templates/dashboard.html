@@ -189,40 +189,43 @@
   };
 
   document.addEventListener("DOMContentLoaded", () => {
-    const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte"));
-    if (!utilisateur) {
-      alert("Utilisateur non connecté !");
-      return;
-    }
+  const utilisateur = JSON.parse(localStorage.getItem("utilisateurConnecte"));
+  console.log("Utilisateur connecté :", utilisateur);
 
-    const prenom = utilisateur.prenom || '';
-    const nom = utilisateur.nom || '';
-    const pays = (utilisateur.pays || '').toLowerCase().trim();
-    
-    // 🟡 Correction ici : déduction automatique de la devise
-    let devise = utilisateur.devise;
-    if (!devise || devise.trim() === "") {
-      devise = paysToDevise[pays] || 'XOF'; // Par défaut XOF si pays non reconnu
-    }
+  if (!utilisateur) {
+    alert("Utilisateur non connecté !");
+    return;
+  }
 
-    document.getElementById('userInfo').innerText = `${prenom} ${nom}`;
+  const prenom = utilisateur.prenom || '';
+  const nom = utilisateur.nom || '';
+  const pays = (utilisateur.pays || '').toLowerCase().trim();
+  let devise = utilisateur.devise;
 
-    const userEmail = utilisateur.email || '';
+  if (!devise || devise.trim() === "") {
+    devise = paysToDevise[pays] || 'XOF';
+  }
 
-    fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.solde !== undefined) {
-          document.getElementById('solde').innerText = `Solde : ${data.solde} ${devise}`;
-        } else {
-          document.getElementById('solde').innerText = `Solde : -- ${devise}`;
-        }
-      })
-      .catch(err => {
-        console.error("Erreur récupération solde :", err);
+  document.getElementById('userInfo').innerText = `${prenom} ${nom}`;
+  const userEmail = utilisateur.email || '';
+  console.log("Email utilisé :", userEmail);
+
+  fetch(`https://luminous-clarity-production.up.railway.app/get-solde?email=${userEmail}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("Données de solde reçues :", data);
+      if (data.solde !== undefined && data.solde !== null) {
+        document.getElementById('solde').innerText = `Solde : ${data.solde} ${devise}`;
+      } else {
         document.getElementById('solde').innerText = `Solde : -- ${devise}`;
-      });
-  });
+      }
+    })
+    .catch(err => {
+      console.error("Erreur récupération solde :", err);
+      document.getElementById('solde').innerText = `Solde : -- ${devise}`;
+    });
+});
+
 
   function logout() {
     localStorage.clear();
