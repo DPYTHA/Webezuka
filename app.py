@@ -323,6 +323,108 @@ def update_taux():
     return jsonify({"success": True, "message": "Taux de conversion mis à jour avec succès"})
 
 
+# Dictionnaire pays vers devise (en minuscules, apostrophe droite standard)
+pays_to_devise = {
+    "côte d'ivoire": "XOF", "sénégal": "XOF", "mali": "XOF", "france": "EUR",
+    "états-unis": "USD", "canada": "CAD", "royaume-uni": "GBP", "nigeria": "NGN",
+    "maroc": "MAD", "algérie": "DZD", "tunisie": "TND", "afrique du sud": "ZAR",
+    "chine": "CNY", "inde": "INR", "russie": "RUB", "japon": "JPY", "turquie": "TRY",
+    "cameroun": "XAF", "mauritanie": "MRU", "burkina-faso": "XOF", "bénin": "XOF",
+    "ghana": "GHS", "niger": "XOF","togo": "XOF","congo-kinshasa": "CDF",
+    "guinée-conakry": "GNF"
+}
+
+def get_currency_by_country(country):
+    # Normalisation : en minuscules, apostrophes normales
+    normalized = country.lower().replace("’", "'").strip()
+    return pays_to_devise.get(normalized)
+
+@app.route('/register', methods=['POST'])
+def register():
+    try:
+        data = request.get_json(force=True)
+        required_fields = ['nom', 'prenom', 'email', 'motdepasse', 'telephone', 'pays']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f"Le champ '{field}' est requis."}), 400
+
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'error': 'Email déjà utilisé.'}), 400
+
+        hashed_pw = generate_password_hash(data['motdepasse'])
+
+        # Utilise la fonction pour récupérer la devise
+        devise = get_currency_by_country(data['pays'])
+        if not devise:
+            return jsonify({'error': "Pays non reconnu pour la devise."}), 400
+
+        user = User(
+            nom=data['nom'],
+            prenom=data['prenom'],
+            email=data['email'],
+            motdepasse=hashed_pw,
+            telephone=data['telephone'],
+            pays=data['pays'],
+            devise=devise  # <- bien fixée côté serveur ici
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+       
+        # Envoie des mails (try/catch recommandé ici aussi)
+        # ✅ Envoi de l'email de bienvenue + notification à l'admin
+        try:
+            send_email(
+                user.email,
+                "Bienvenue sur ÉZUKA",
+                f"""
+                <h2>Bonjour {user.prenom},</h2>
+                <p>🎉 <strong>Bienvenue sur votre compte ÉZUKA !</strong> Vous êtes maintenant enregistré(e) avec succès.</p>
+
+                <p>💼 Vous pouvez désormais envoyer et recevoir de l'argent en toute sécurité.</p>
+
+                <p>🌍 Les transferts sont disponibles entre les pays suivants :</p>
+                <ul>
+                    <li>Côte d'Ivoire (XOF)</li>
+                    <li>Mali (XOF)</li>
+                    <li>Burkina-Faso (XOF)</li>
+                    <li>Sénégal (XOF)</li>
+                    <li>Cameroun (XAF)</li>
+                    <li>Ghana (GHS)</li>
+                    <li>Mauritanie (MRU)</li>
+                    <li>Niger (XOF)</li>
+                    <li>Congo-Kinshasa (CDF)</li>
+                    <li>Bénin (XOF)</li>
+                    <li>Togo (XOF)</li>
+                    <li>Guinée-Conakry (GNF)</li>
+                    <li>Russie (RUB)</li>
+                </ul>
+
+                <p>📲 Pour toute assistance, notre équipe est disponible de 9h à 20h (heure de Moscou).</p>
+
+                <p>Merci de faire confiance à <strong>ÉZUKA</strong> !</p>
+                """
+            )
+
+            send_email(
+                EMAIL_ADMIN,
+                "Nouvelle inscription sur ÉZUKA",
+                f"<p><strong>{user.nom} {user.prenom}</strong> vient de s'inscrire.</p>"
+            )
+        except Exception as mail_err:
+            print("Erreur d'envoi de mail :", mail_err)
+        return jsonify({'message': 'Inscription réussie'}), 201
+
+    except Exception as e:
+        print("Erreur dans /register :", str(e))
+        return jsonify({'error': 'Erreur interne du serveur. Veuillez réessayer plus tard.'}), 500
+
+        
+
+
+
+
 
 # Routes
 @app.route('/register', methods=['POST'])
