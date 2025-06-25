@@ -472,10 +472,17 @@ def user_info():
 @app.route('/get-solde')
 def get_solde():
     email = request.args.get('email')
+    
+    if not email:
+        return jsonify({'error': 'Email manquant'}), 400
+    
     user = User.query.filter_by(email=email).first()
+    
     if user:
         return jsonify({'solde': user.solde})
-    return jsonify({'solde': None}), 404
+    
+    return jsonify({'error': 'Utilisateur non trouvé'}), 404
+
 
 #depot route
 
