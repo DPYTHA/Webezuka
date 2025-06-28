@@ -223,23 +223,33 @@ def token_required(f):
     return decorated
 
 #pays associe au devise.
-def get_currency_by_country(pays):
-    mapping = {
-        "Côte d'Ivoire": "XOF",
-        "Mali": "XOF",
-        "Burkina-Faso": "XOF",
-        "Sénégal": "XOF",
-        "Cameroun": "XAF",
-        "Ghana": "GHS",
-        "Mauritanie": "MRU",
-        "Niger": "XOF",
-        "Congo-Kinshasa": "CDF",
-        "Bénin": "XOF",
-        "Togo": "XOF",
-        "Guinée-Conakry": "GNF",
-        "Russie": "RUB"
+def get_currency_by_country(country):
+    pays_to_devise = {
+        "cote d'ivoire": "XOF",
+        "côte d'ivoire": "XOF",
+        "mali": "XOF",
+        "burkina-faso": "XOF",
+        "sénégal": "XOF",
+        "senegal": "XOF",
+        "cameroun": "XAF",
+        "ghana": "GHS",
+        "mauritanie": "MRU",
+        "niger": "XOF",
+        "congo-kinshasa": "CDF",
+        "rdc": "CDF",
+        "bénin": "XOF",
+        "benin": "XOF",
+        "togo": "XOF",
+        "guinée-conakry": "GNF",
+        "guinee-conakry": "GNF",
+        "russie": "RUB",
+        "russia": "RUB"
     }
-    return mapping.get(pays, "XOF")  # XOF par défaut si le pays n'est pas reconnu
+
+    # Normalisation
+    normalized = country.lower().replace("’", "'").strip()
+    return pays_to_devise.get(normalized)
+
 
 
 
