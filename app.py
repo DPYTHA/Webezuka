@@ -325,7 +325,7 @@ def update_taux():
 
 # Dictionnaire pays vers devise (en minuscules, apostrophe droite standard)
 pays_to_devise = {
-    "côte d'ivoire": "XOF", "sénégal": "XOF", "mali": "XOF", "france": "EUR",
+    "côte d'Ivoire": "XOF", "sénégal": "XOF", "mali": "XOF", "france": "EUR",
     "états-unis": "USD", "canada": "CAD", "royaume-uni": "GBP", "nigeria": "NGN",
     "maroc": "MAD", "algérie": "DZD", "tunisie": "TND", "afrique du sud": "ZAR",
     "chine": "CNY", "inde": "INR", "russie": "RUB", "japon": "JPY", "turquie": "TRY",
