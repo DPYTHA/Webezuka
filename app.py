@@ -333,21 +333,7 @@ def update_taux():
     return jsonify({"success": True, "message": "Taux de conversion mis à jour avec succès"})
 
 
-# Dictionnaire pays vers devise (en minuscules, apostrophe droite standard)
-pays_to_devise = {
-    "côte d'Ivoire": "XOF", "sénégal": "XOF", "mali": "XOF", "france": "EUR",
-    "états-unis": "USD", "canada": "CAD", "royaume-uni": "GBP", "nigeria": "NGN",
-    "maroc": "MAD", "algérie": "DZD", "tunisie": "TND", "afrique du sud": "ZAR",
-    "chine": "CNY", "inde": "INR", "russie": "RUB", "japon": "JPY", "turquie": "TRY",
-    "cameroun": "XAF", "mauritanie": "MRU", "burkina-faso": "XOF", "bénin": "XOF",
-    "ghana": "GHS", "niger": "XOF","togo": "XOF","congo-kinshasa": "CDF",
-    "guinée-conakry": "GNF"
-}
 
-def get_currency_by_country(country):
-    # Normalisation : en minuscules, apostrophes normales
-    normalized = country.lower().replace("’", "'").strip()
-    return pays_to_devise.get(normalized)
 
 @app.route('/register', methods=['POST'])
 def register():
